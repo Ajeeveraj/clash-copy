@@ -4,7 +4,6 @@ public class TowerHealth : MonoBehaviour
 {
     public int maxHealth = 1000;
     public int currentHealth;
-
     public bool isDestroyed = false;
 
     void Start()
@@ -21,17 +20,10 @@ public class TowerHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            DestroyTower();
+            isDestroyed = true;
+            Debug.Log(gameObject.name + " has been destroyed!");
         }
     }
-
-    void DestroyTower()
-    {
-        isDestroyed = true;
-        Debug.Log(gameObject.name + " has been destroyed!");
-
-        // Disable the tower visually
-        gameObject.SetActive(false);
-    }
 }
+
 
