@@ -2,56 +2,50 @@ using UnityEngine;
 
 public class TowerAttack : MonoBehaviour
 {
-    [Header("Tower Settings")]
-    public float range = 5f;
-    public float fireRate = 1f;
+    public float range = 6f;
+    public float attackCooldown = 1f;
     public GameObject projectilePrefab;
+    public Transform shootPoint;
 
-    private float fireCooldown = 0f;
+    private float timer = 0f;
 
     void Update()
     {
-        fireCooldown -= Time.deltaTime;
+        timer -= Time.deltaTime;
 
-        if (fireCooldown <= 0f)
-        {
-            Transform target = GetClosestEnemy();
-            if (target != null)
-            {
-                Shoot(target);
-                fireCooldown = fireRate;
-            }
-        }
-    }
+        // Find all troops (modern Unity API)
+        TroopHealth[] troops = Object.FindObjectsByType<TroopHealth>(FindObjectsInactive.Exclude);
 
-    Transform GetClosestEnemy()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        Transform closest = null;
+        TroopHealth closest = null;
         float closestDist = Mathf.Infinity;
 
-        foreach (GameObject enemy in enemies)
+        foreach (var troop in troops)
         {
-            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            float dist = Vector3.Distance(transform.position, troop.transform.position);
+
             if (dist < closestDist && dist <= range)
             {
                 closestDist = dist;
-                closest = enemy.transform;
+                closest = troop;
             }
         }
 
-        return closest;
-    }
-
-    void Shoot(Transform target)
-    {
-        if (projectilePrefab == null) return;
-
-        GameObject proj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        Projectile projectile = proj.GetComponent<Projectile>();
-        if (projectile != null)
+        if (closest != null && timer <= 0f)
         {
-            projectile.target = target;
+            ShootProjectile(closest);
+            timer = attackCooldown;
         }
     }
+
+    void ShootProjectile(TroopHealth target)
+    {
+        GameObject proj = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
+
+        Projectile p = proj.GetComponent<Projectile>();
+        p.SetTarget(target.transform.root);
+
+    }
 }
+
+
+

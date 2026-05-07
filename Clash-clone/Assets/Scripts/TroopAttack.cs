@@ -16,7 +16,11 @@ public class TroopAttack : MonoBehaviour
     {
         movement = GetComponent<TroopMovement>();
         targetTower = movement.GetTargetTower();
-        towerHealth = targetTower.GetComponent<TowerHealth>();
+
+        if (targetTower != null)
+        {
+            towerHealth = targetTower.GetComponent<TowerHealth>();
+        }
     }
 
     void Update()
@@ -43,4 +47,5 @@ public class TroopAttack : MonoBehaviour
         }
     }
 }
+
 
