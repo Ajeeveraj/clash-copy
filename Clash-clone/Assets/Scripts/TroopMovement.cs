@@ -7,8 +7,8 @@ public class TroopMovement : MonoBehaviour
 
     void Start()
     {
-        // Automatically find the Princess Tower
-        GameObject towerObj = GameObject.FindWithTag("PrincessTower");
+        // CHANGE THIS depending on troop side:
+        GameObject towerObj = GameObject.FindWithTag("EnemyPrincessTower");
 
         if (towerObj != null)
         {
@@ -16,7 +16,7 @@ public class TroopMovement : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No PrincessTower found in scene!");
+            Debug.LogError("No EnemyPrincessTower found in scene!");
         }
     }
 
@@ -25,20 +25,20 @@ public class TroopMovement : MonoBehaviour
         if (targetTower == null)
             return;
 
-        // Move toward tower
         transform.position = Vector3.MoveTowards(
             transform.position,
             targetTower.position,
             moveSpeed * Time.deltaTime
         );
 
-        // Optional: face the tower
+        // Face tower
         Vector3 dir = targetTower.position - transform.position;
         dir.y = 0;
         if (dir != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(dir);
     }
 }
+
 
 
 

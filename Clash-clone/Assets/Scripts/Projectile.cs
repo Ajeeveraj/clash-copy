@@ -31,6 +31,8 @@ public class Projectile : MonoBehaviour
             if (th != null)
             {
                 Debug.Log("Projectile hit troop for " + damage);
+                Debug.Log("Projectile damage value = " + damage);
+
                 th.TakeDamage(damage);
             }
 
@@ -38,4 +40,5 @@ public class Projectile : MonoBehaviour
         }
     }
 }
+
 

@@ -2,50 +2,50 @@ using UnityEngine;
 
 public class TowerAttack : MonoBehaviour
 {
-    public float range = 6f;
+    public float attackRange = 7f;
     public float attackCooldown = 1f;
     public GameObject projectilePrefab;
     public Transform shootPoint;
 
-    private float timer = 0f;
+    private float cooldownTimer = 0f;
 
     void Update()
     {
-        timer -= Time.deltaTime;
+        cooldownTimer -= Time.deltaTime;
 
-        // Find all troops (modern Unity API)
-        TroopHealth[] troops = Object.FindObjectsByType<TroopHealth>(FindObjectsInactive.Exclude);
-
-        TroopHealth closest = null;
+        // Find nearest troop
+        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+        Transform closest = null;
         float closestDist = Mathf.Infinity;
 
-        foreach (var troop in troops)
+        foreach (GameObject t in troops)
         {
-            float dist = Vector3.Distance(transform.position, troop.transform.position);
-
-            if (dist < closestDist && dist <= range)
+            float dist = Vector3.Distance(transform.position, t.transform.position);
+            if (dist < closestDist)
             {
                 closestDist = dist;
-                closest = troop;
+                closest = t.transform;
             }
         }
 
-        if (closest != null && timer <= 0f)
+        if (closest == null)
+            return;
+
+        if (closestDist > attackRange)
+            return;
+
+        if (cooldownTimer <= 0f)
         {
-            ShootProjectile(closest);
-            timer = attackCooldown;
+            cooldownTimer = attackCooldown;
+            GameObject p = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
+            p.GetComponent<Projectile>().SetTarget(closest);
+
+
+            Debug.Log("Tower shot troop");
         }
     }
-
-    void ShootProjectile(TroopHealth target)
-    {
-        GameObject proj = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
-
-        Projectile p = proj.GetComponent<Projectile>();
-        p.SetTarget(target.transform.root);
-
-    }
 }
+
 
 
 

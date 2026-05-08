@@ -13,12 +13,10 @@ public class TroopHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        Debug.Log("Troop took damage, new HP = " + currentHealth);
+        Debug.Log("Troop took damage: " + amount + " | New HP = " + currentHealth);
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     void Die()
@@ -27,5 +25,6 @@ public class TroopHealth : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
 
 

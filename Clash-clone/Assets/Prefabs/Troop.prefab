@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -6619827321356549101}
   m_Layer: 0
   m_Name: Troop
-  m_TagString: Enemy
+  m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,8 +157,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   moveSpeed: 2
-  leftPrincessTower: {fileID: 0}
-  rightPrincessTower: {fileID: 0}
 --- !u!114 &-6619827321356549101
 MonoBehaviour:
   m_ObjectHideFlags: 0

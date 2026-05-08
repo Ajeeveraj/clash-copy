@@ -187,67 +187,6 @@ Transform:
   - {fileID: 512035830}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &209442580
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_Name
-      value: Troop
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.9723964
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.0000013
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.1742036
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8620682437409072745, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      propertyPath: moveSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
 --- !u!1 &273922247
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,7 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -814,7 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1010,7 +949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1045,7 +984,7 @@ GameObject:
   - component: {fileID: 1313247792}
   m_Layer: 0
   m_Name: PrincessTowerRight (2)
-  m_TagString: Untagged
+  m_TagString: EnemyPrincessTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1158,7 +1097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1177,6 +1116,63 @@ MonoBehaviour:
   maxHealth: 1000
   currentHealth: 0
   isDestroyed: 0
+--- !u!1001 &1384330825
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_Name
+      value: Troop
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.554484
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.3347497
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
 --- !u!1 &1641270883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,7 +1189,7 @@ GameObject:
   - component: {fileID: 1641270889}
   m_Layer: 0
   m_Name: PrincessTowerLeft (2)
-  m_TagString: Untagged
+  m_TagString: EnemyPrincessTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1305,7 +1301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1677,7 +1673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  range: 5
+  attackRange: 7
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1933,4 +1929,4 @@ SceneRoots:
   - {fileID: 1648316502}
   - {fileID: 1793909324}
   - {fileID: 133515211}
-  - {fileID: 209442580}
+  - {fileID: 1384330825}

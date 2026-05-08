@@ -2,50 +2,50 @@ using UnityEngine;
 
 public class TroopAttack : MonoBehaviour
 {
-    public int damage = 50;
-    public float attackRange = 2f;
+    public int damage = 40;
+    public float attackRange = 1.5f;
     public float attackCooldown = 1f;
 
-    private float attackTimer = 0f;
-
-    private TroopMovement movement;
+    private float cooldownTimer = 0f;
     private Transform targetTower;
     private TowerHealth towerHealth;
 
     void Start()
     {
-        movement = GetComponent<TroopMovement>();
-        targetTower = movement.GetTargetTower();
+        // CHANGE THIS depending on troop side:
+        GameObject towerObj = GameObject.FindWithTag("EnemyPrincessTower");
 
-        if (targetTower != null)
+        if (towerObj != null)
         {
+            targetTower = towerObj.transform;
             towerHealth = targetTower.GetComponent<TowerHealth>();
+        }
+        else
+        {
+            Debug.LogError("No EnemyPrincessTower found in scene!");
         }
     }
 
     void Update()
     {
-        if (towerHealth == null || towerHealth.isDestroyed) return;
+        if (targetTower == null)
+            return;
+
+        cooldownTimer -= Time.deltaTime;
 
         float distance = Vector3.Distance(transform.position, targetTower.position);
 
         if (distance <= attackRange)
         {
-            movement.StopMoving(); // stop walking
-            AttackTower();
-        }
-    }
-
-    void AttackTower()
-    {
-        attackTimer -= Time.deltaTime;
-
-        if (attackTimer <= 0f)
-        {
-            towerHealth.TakeDamage(damage);
-            attackTimer = attackCooldown;
+            if (cooldownTimer <= 0f)
+            {
+                cooldownTimer = attackCooldown;
+                towerHealth.TakeDamage(damage);
+                Debug.Log("Troop attacked tower for " + damage);
+            }
         }
     }
 }
+
 
 
