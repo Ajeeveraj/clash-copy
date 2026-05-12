@@ -2,43 +2,85 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f;
-    public int damage = 40;
+    public float damage = 80f;
+    public float speed = 20f;
+    public float lifeTime = 5f;
 
     private Transform target;
+    private Vector3 targetPosition;
+    private bool usePosition = false;
 
-    public void SetTarget(Transform t)
+    void Start()
     {
-        target = t;
+        Debug.Log("[Projectile] Started at " + transform.position);
+        Destroy(gameObject, lifeTime);
     }
 
     void Update()
     {
-        if (target == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        // Move toward target
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-
-        // Check if close enough to hit
-        if (Vector3.Distance(transform.position, target.position) < 0.1f)
-        {
-            // Always get TroopHealth from the root object
-            TroopHealth th = target.transform.root.GetComponent<TroopHealth>();
-            if (th != null)
-            {
-                Debug.Log("Projectile hit troop for " + damage);
-                Debug.Log("Projectile damage value = " + damage);
-
-                th.TakeDamage(damage);
-            }
-
-            Destroy(gameObject);
-        }
+        if (target != null)
+            MoveTowards(target.position);
+        else if (usePosition)
+            MoveTowards(targetPosition);
     }
+
+    void MoveTowards(Vector3 dest)
+    {
+        Vector3 dir = dest - transform.position;
+        float dist = dir.magnitude;
+        if (dist < 0.05f) return;
+        dir.Normalize();
+        transform.position += dir * speed * Time.deltaTime;
+        if (Time.frameCount % 10 == 0)
+            Debug.Log("[Projectile] moving. pos=" + transform.position + " targetDist=" + dist);
+    }
+
+    public void SetTarget(Transform t)
+    {
+        target = t;
+        usePosition = false;
+        Debug.Log("[Projectile] SetTarget called. target=" + (t ? t.name : "null"));
+    }
+
+    public void SetTarget(Vector3 worldPos)
+    {
+        target = null;
+        targetPosition = worldPos;
+        usePosition = true;
+        Debug.Log("[Projectile] SetTarget called. position=" + worldPos);
+    }
+
+    public GameObject shooter; // set this when instantiating
+
+    void OnTriggerEnter(Collider other)
+{
+    if (other.gameObject == shooter) return;
+
+    if (!other.CompareTag("Troop"))
+    {
+        Debug.Log("[Projectile] Ignored (not Troop): " + other.name + " layer=" + LayerMask.LayerToName(other.gameObject.layer));
+        return;
+    }
+
+    TroopHealth th = other.GetComponent<TroopHealth>() ?? other.GetComponentInParent<TroopHealth>();
+    if (th != null)
+    {
+        Debug.Log("[Projectile] Applying damage " + damage + " to " + th.gameObject.name);
+        th.TakeDamage(damage);
+        Destroy(gameObject);
+        return;
+    }
+
+    Debug.Log("[Projectile] Tagged Troop but no TroopHealth found on " + other.name);
 }
+
+
+
+}
+
+
+
+
+
 
 
