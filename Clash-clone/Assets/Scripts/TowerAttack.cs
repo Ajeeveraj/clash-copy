@@ -8,9 +8,19 @@ public class TowerAttack : MonoBehaviour
     public Transform shootPoint;
 
     private float cooldownTimer = 0f;
+    private TowerHealth towerHealth;
+
+    void Start()
+    {
+        towerHealth = GetComponent<TowerHealth>();
+    }
 
     void Update()
     {
+        // Stop attacking if tower is destroyed
+        if (towerHealth != null && towerHealth.isDestroyed)
+            return;
+
         cooldownTimer -= Time.deltaTime;
 
         // Find nearest troop
@@ -37,14 +47,15 @@ public class TowerAttack : MonoBehaviour
         if (cooldownTimer <= 0f)
         {
             cooldownTimer = attackCooldown;
+
             GameObject p = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
             p.GetComponent<Projectile>().SetTarget(closest);
-
 
             Debug.Log("Tower shot troop");
         }
     }
 }
+
 
 
 

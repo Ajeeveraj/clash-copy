@@ -6,9 +6,12 @@ public class TowerHealth : MonoBehaviour
     public int currentHealth;
     public bool isDestroyed = false;
 
+    private MeshRenderer[] renderers;
+
     void Start()
     {
         currentHealth = maxHealth;
+        renderers = GetComponentsInChildren<MeshRenderer>();
     }
 
     public void TakeDamage(int amount)
@@ -21,9 +24,15 @@ public class TowerHealth : MonoBehaviour
         {
             currentHealth = 0;
             isDestroyed = true;
+
+            // Disable tower visuals
+            foreach (MeshRenderer r in renderers)
+                r.enabled = false;
+
             Debug.Log(gameObject.name + " has been destroyed!");
         }
     }
 }
+
 
 

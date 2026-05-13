@@ -7,28 +7,42 @@ public class TroopAttack : MonoBehaviour
     public float attackCooldown = 1f;
 
     private float cooldownTimer = 0f;
+    private TowerHealth targetHealth;
     private Transform targetTower;
-    private TowerHealth towerHealth;
 
     void Start()
     {
-        // CHANGE THIS depending on troop side:
-        GameObject towerObj = GameObject.FindWithTag("EnemyPrincessTower");
+        // Find ALL enemy towers
+        GameObject[] towers = GameObject.FindGameObjectsWithTag("EnemyTower");
 
-        if (towerObj != null)
+        if (towers.Length == 0)
         {
-            targetTower = towerObj.transform;
-            towerHealth = targetTower.GetComponent<TowerHealth>();
+            Debug.LogError("No EnemyTower objects found!");
+            return;
         }
-        else
+
+        // Pick the closest tower
+        float closestDist = Mathf.Infinity;
+
+        foreach (GameObject t in towers)
         {
-            Debug.LogError("No EnemyPrincessTower found in scene!");
+            float dist = Vector3.Distance(transform.position, t.transform.position);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                targetTower = t.transform;
+                targetHealth = t.GetComponent<TowerHealth>();
+            }
         }
     }
 
     void Update()
     {
-        if (targetTower == null)
+        if (targetTower == null || targetHealth == null)
+            return;
+
+        // Stop attacking dead towers
+        if (targetHealth.isDestroyed)
             return;
 
         cooldownTimer -= Time.deltaTime;
@@ -40,12 +54,13 @@ public class TroopAttack : MonoBehaviour
             if (cooldownTimer <= 0f)
             {
                 cooldownTimer = attackCooldown;
-                towerHealth.TakeDamage(damage);
+                targetHealth.TakeDamage(damage);
                 Debug.Log("Troop attacked tower for " + damage);
             }
         }
     }
 }
+
 
 
 

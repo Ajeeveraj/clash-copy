@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TroopHealth : MonoBehaviour
+
+
 {
     [Header("Health")]
     public float maxHealth = 100f;
@@ -24,6 +26,7 @@ public class TroopHealth : MonoBehaviour
         UpdateHealthUI();
         Debug.Log($"[TroopHealth] Awake {gameObject.name} id={gameObject.GetInstanceID()} maxHealth={maxHealth}");
     }
+
 
     void OnEnable()
     {
