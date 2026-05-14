@@ -1,82 +1,48 @@
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class Projectile : MonoBehaviour
 {
-    public float damage = 80f;
-    public float speed = 20f;
-    public float lifeTime = 5f;
+    public float speed = 12f;
+    public int damage = 50;
+    public float destroyAfter = 5f;
 
     private Transform target;
-    private Vector3 targetPosition;
-    private bool usePosition = false;
+    private float lifeTimer;
 
-    void Start()
-    {
-        Debug.Log("[Projectile] Started at " + transform.position);
-        Destroy(gameObject, lifeTime);
-    }
+    public void SetTarget(Transform t) { target = t; }
 
     void Update()
     {
-        if (target != null)
-            MoveTowards(target.position);
-        else if (usePosition)
-            MoveTowards(targetPosition);
+        lifeTimer += Time.deltaTime;
+        if (lifeTimer >= destroyAfter) Destroy(gameObject);
+        if (target == null) return;
+        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
-
-    void MoveTowards(Vector3 dest)
-    {
-        Vector3 dir = dest - transform.position;
-        float dist = dir.magnitude;
-        if (dist < 0.05f) return;
-        dir.Normalize();
-        transform.position += dir * speed * Time.deltaTime;
-        if (Time.frameCount % 10 == 0)
-            Debug.Log("[Projectile] moving. pos=" + transform.position + " targetDist=" + dist);
-    }
-
-    public void SetTarget(Transform t)
-    {
-        target = t;
-        usePosition = false;
-        Debug.Log("[Projectile] SetTarget called. target=" + (t ? t.name : "null"));
-    }
-
-    public void SetTarget(Vector3 worldPos)
-    {
-        target = null;
-        targetPosition = worldPos;
-        usePosition = true;
-        Debug.Log("[Projectile] SetTarget called. position=" + worldPos);
-    }
-
-    public GameObject shooter; // set this when instantiating
 
     void OnTriggerEnter(Collider other)
-{
-    if (other.gameObject == shooter) return;
-
-    if (!other.CompareTag("Troop"))
     {
-        Debug.Log("[Projectile] Ignored (not Troop): " + other.name + " layer=" + LayerMask.LayerToName(other.gameObject.layer));
-        return;
-    }
+        // prefer troop first
+        var troop = other.GetComponentInParent<TroopHealth>();
+        if (troop != null)
+        {
+            troop.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
 
-    TroopHealth th = other.GetComponent<TroopHealth>() ?? other.GetComponentInParent<TroopHealth>();
-    if (th != null)
-    {
-        Debug.Log("[Projectile] Applying damage " + damage + " to " + th.gameObject.name);
-        th.TakeDamage(damage);
-        Destroy(gameObject);
-        return;
+        var tower = other.GetComponentInParent<TowerHealth>();
+        if (tower != null)
+        {
+            tower.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
     }
-
-    Debug.Log("[Projectile] Tagged Troop but no TroopHealth found on " + other.name);
 }
 
 
 
-}
 
 
 

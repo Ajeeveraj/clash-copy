@@ -5,25 +5,23 @@ public class TroopAttack : MonoBehaviour
     public int damage = 40;
     public float attackRange = 1.5f;
     public float attackCooldown = 1f;
+    public string enemyTowerTag = "EnemyTower";
 
     private float cooldownTimer = 0f;
-    private TowerHealth targetHealth;
     private Transform targetTower;
+    private TowerHealth targetHealth;
 
     void Start()
     {
-        // Find ALL enemy towers
-        GameObject[] towers = GameObject.FindGameObjectsWithTag("EnemyTower");
-
+        // find closest enemy tower (works with multiple towers)
+        GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
         if (towers.Length == 0)
         {
-            Debug.LogError("No EnemyTower objects found!");
+            Debug.LogError("No towers with tag " + enemyTowerTag + " found!");
             return;
         }
 
-        // Pick the closest tower
         float closestDist = Mathf.Infinity;
-
         foreach (GameObject t in towers)
         {
             float dist = Vector3.Distance(transform.position, t.transform.position);
@@ -31,35 +29,31 @@ public class TroopAttack : MonoBehaviour
             {
                 closestDist = dist;
                 targetTower = t.transform;
-                targetHealth = t.GetComponent<TowerHealth>();
+                targetHealth = t.GetComponentInParent<TowerHealth>();
             }
         }
+
+        if (targetHealth == null) Debug.LogError("TowerHealth NOT found on parent tower!");
     }
 
     void Update()
     {
-        if (targetTower == null || targetHealth == null)
-            return;
-
-        // Stop attacking dead towers
-        if (targetHealth.isDestroyed)
-            return;
+        if (targetTower == null || targetHealth == null) return;
+        if (targetHealth.isDestroyed) return;
 
         cooldownTimer -= Time.deltaTime;
-
         float distance = Vector3.Distance(transform.position, targetTower.position);
 
-        if (distance <= attackRange)
+        if (distance <= attackRange && cooldownTimer <= 0f)
         {
-            if (cooldownTimer <= 0f)
-            {
-                cooldownTimer = attackCooldown;
-                targetHealth.TakeDamage(damage);
-                Debug.Log("Troop attacked tower for " + damage);
-            }
+            cooldownTimer = attackCooldown;
+            targetHealth.TakeDamage(damage);
+            Debug.Log($"{gameObject.name} attacked {targetTower.name} for {damage}");
         }
     }
 }
+
+
 
 
 

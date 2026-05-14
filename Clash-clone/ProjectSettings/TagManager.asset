@@ -8,6 +8,8 @@ TagManager:
   - PrincessTower
   - Troop
   - EnemyPrincessTower
+  - PlayerTower
+  - EnemyTower
   layers:
   - Default
   - TransparentFX

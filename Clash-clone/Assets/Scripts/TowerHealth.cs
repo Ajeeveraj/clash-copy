@@ -1,38 +1,81 @@
 using UnityEngine;
+using UnityEngine.Events;
 
+[DisallowMultipleComponent]
 public class TowerHealth : MonoBehaviour
 {
+    [Header("Health")]
     public int maxHealth = 1000;
-    public int currentHealth;
-    public bool isDestroyed = false;
+    [HideInInspector] public int currentHealth;
+    [HideInInspector] public bool isDestroyed = false;
 
-    private MeshRenderer[] renderers;
+    [Header("Optional")]
+    public GameObject deathVFX;
+    public bool destroyOnDeath = false;
+    public UnityEvent onDestroyed;
 
-    void Start()
+    // UI hook (optional): assign a HealthBar component on the same GameObject or child
+    public HealthBar healthBar;
+
+    private Renderer[] renderers;
+    private Collider[] colliders;
+
+    void Awake()
     {
-        currentHealth = maxHealth;
-        renderers = GetComponentsInChildren<MeshRenderer>();
+        currentHealth = Mathf.Max(1, maxHealth);
+        renderers = GetComponentsInChildren<Renderer>(true);
+        colliders = GetComponentsInChildren<Collider>(true);
+
+        if (healthBar != null) healthBar.SetMax(currentHealth);
     }
 
     public void TakeDamage(int amount)
     {
         if (isDestroyed) return;
+        if (amount <= 0) return;
 
         currentHealth -= amount;
+        Debug.Log($"{name} took {amount} damage. HP: {currentHealth}/{maxHealth}");
+
+        if (healthBar != null) healthBar.Set(currentHealth);
 
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             isDestroyed = true;
-
-            // Disable tower visuals
-            foreach (MeshRenderer r in renderers)
-                r.enabled = false;
-
-            Debug.Log(gameObject.name + " has been destroyed!");
+            Die();
         }
     }
+
+    public void Heal(int amount)
+    {
+        if (isDestroyed) return;
+        if (amount <= 0) return;
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        if (healthBar != null) healthBar.Set(currentHealth);
+    }
+
+    private void Die()
+    {
+        foreach (var r in renderers) if (r != null) r.enabled = false;
+        foreach (var c in colliders) if (c != null) c.enabled = false;
+
+        if (deathVFX != null) Instantiate(deathVFX, transform.position, Quaternion.identity);
+        Debug.Log($"{name} destroyed");
+        onDestroyed?.Invoke();
+
+        if (destroyOnDeath) Destroy(gameObject);
+    }
+
+    void OnValidate()
+    {
+        if (maxHealth < 1) maxHealth = 1;
+        if (!Application.isPlaying) currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+    }
 }
+
+
+
 
 
 

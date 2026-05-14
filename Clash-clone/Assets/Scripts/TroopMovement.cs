@@ -8,7 +8,8 @@ public class TroopMovement : MonoBehaviour
     void Start()
     {
         // CHANGE THIS depending on troop side:
-        GameObject towerObj = GameObject.FindWithTag("EnemyPrincessTower");
+        GameObject towerObj = GameObject.FindWithTag("EnemyTower");
+        
 
         if (towerObj != null)
         {
@@ -38,7 +39,6 @@ public class TroopMovement : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(dir);
     }
 }
-
 
 
 

@@ -160,7 +160,6 @@ GameObject:
   m_Component:
   - component: {fileID: 133515211}
   - component: {fileID: 133515213}
-  - component: {fileID: 133515212}
   m_Layer: 0
   m_Name: Parent_tower
   m_TagString: Untagged
@@ -189,21 +188,6 @@ Transform:
   - {fileID: 512035830}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &133515212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 133515209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 500
-  currentHealth: 0
-  isDestroyed: 0
 --- !u!136 &133515213
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -534,8 +518,8 @@ GameObject:
   - component: {fileID: 512035829}
   - component: {fileID: 512035828}
   - component: {fileID: 512035827}
-  - component: {fileID: 512035831}
   - component: {fileID: 512035832}
+  - component: {fileID: 512035831}
   m_Layer: 0
   m_Name: KingTower (1)
   m_TagString: Untagged
@@ -645,13 +629,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 512035826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
-  attackCooldown: 1
-  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
-  shootPoint: {fileID: 66441500}
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 1000
+  currentHealth: 0
+  isDestroyed: 0
 --- !u!114 &512035832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,12 +644,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 512035826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
+  attackRange: 7
+  attackCooldown: 1
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!1 &761542676
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,8 +664,8 @@ GameObject:
   - component: {fileID: 761542679}
   - component: {fileID: 761542678}
   - component: {fileID: 761542677}
-  - component: {fileID: 761542681}
   - component: {fileID: 761542682}
+  - component: {fileID: 761542681}
   m_Layer: 0
   m_Name: KingTower
   m_TagString: Untagged
@@ -790,13 +775,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 761542676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
-  attackCooldown: 1
-  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
-  shootPoint: {fileID: 66441500}
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 1000
+  currentHealth: 0
+  isDestroyed: 0
 --- !u!114 &761542682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -806,12 +790,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 761542676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
+  attackRange: 7
+  attackCooldown: 1
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,11 +859,11 @@ GameObject:
   - component: {fileID: 878217683}
   - component: {fileID: 878217682}
   - component: {fileID: 878217681}
-  - component: {fileID: 878217685}
   - component: {fileID: 878217686}
+  - component: {fileID: 878217685}
   m_Layer: 0
   m_Name: PrincessTowerRight (1)
-  m_TagString: Untagged
+  m_TagString: PlayerTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -986,13 +972,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 878217680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
-  attackCooldown: 1
-  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
-  shootPoint: {fileID: 66441500}
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 1000
+  currentHealth: 0
+  isDestroyed: 0
 --- !u!114 &878217686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,12 +987,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 878217680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
+  attackRange: 7
+  attackCooldown: 1
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!1 &1313247786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,11 +1007,11 @@ GameObject:
   - component: {fileID: 1313247789}
   - component: {fileID: 1313247788}
   - component: {fileID: 1313247787}
-  - component: {fileID: 1313247791}
   - component: {fileID: 1313247792}
+  - component: {fileID: 1313247791}
   m_Layer: 0
   m_Name: PrincessTowerRight (2)
-  m_TagString: EnemyPrincessTower
+  m_TagString: EnemyTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1141,6 +1128,7 @@ MonoBehaviour:
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!114 &1313247792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,11 +1292,11 @@ GameObject:
   - component: {fileID: 1641270886}
   - component: {fileID: 1641270885}
   - component: {fileID: 1641270884}
-  - component: {fileID: 1641270888}
   - component: {fileID: 1641270889}
+  - component: {fileID: 1641270888}
   m_Layer: 0
   m_Name: PrincessTowerLeft (2)
-  m_TagString: EnemyPrincessTower
+  m_TagString: EnemyTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1417,13 +1405,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1641270883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
-  attackCooldown: 1
-  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
-  shootPoint: {fileID: 66441500}
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 1000
+  currentHealth: 0
+  isDestroyed: 0
 --- !u!114 &1641270889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,12 +1420,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1641270883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
+  attackRange: 7
+  attackCooldown: 1
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!1 &1648316498
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,11 +1665,11 @@ GameObject:
   - component: {fileID: 1738321535}
   - component: {fileID: 1738321534}
   - component: {fileID: 1738321533}
-  - component: {fileID: 1738321537}
   - component: {fileID: 1738321538}
+  - component: {fileID: 1738321537}
   m_Layer: 0
   m_Name: PrincessTowerLeft
-  m_TagString: Untagged
+  m_TagString: PlayerTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1789,13 +1778,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1738321532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  attackRange: 7
-  attackCooldown: 1
-  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
-  shootPoint: {fileID: 66441500}
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 1000
+  currentHealth: 0
+  isDestroyed: 0
 --- !u!114 &1738321538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1805,12 +1793,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1738321532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
+  attackRange: 7
+  attackCooldown: 1
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  shootPoint: {fileID: 66441500}
+  targetTag: Troop
 --- !u!1 &1793909320
 GameObject:
   m_ObjectHideFlags: 0
