@@ -110,7 +110,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -170,12 +170,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279250cd133eeec4e937b4decde30d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TroopHealth
-  maxHealth: 2000
+  maxHealth: 200
   currentHealth: 0
-  healthFillImage: {fileID: 8168225113418488910}
-  destroyOnDeath: 1
-  destroyDelay: 0.5
-  usesPooling: 0
+  isDead: 0
+  healthBar: {fileID: 7763943231938179342}
 --- !u!1001 &3438809403372367417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -238,14 +236,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5321466208793168972, guid: 26c05988037184d40b32a206714291ef, type: 3}
   m_PrefabInstance: {fileID: 3438809403372367417}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8168225113418488910 stripped
+--- !u!114 &7763943231938179342 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6837105904089018999, guid: 26c05988037184d40b32a206714291ef, type: 3}
+  m_CorrespondingSourceObject: {fileID: -4321753782125764809, guid: 26c05988037184d40b32a206714291ef, type: 3}
   m_PrefabInstance: {fileID: 3438809403372367417}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 123a217b78a16f846b66c1cfce0d9db8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBar

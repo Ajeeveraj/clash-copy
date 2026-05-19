@@ -27,7 +27,7 @@ public class TroopHealth : MonoBehaviour
         if (amount <= 0) return;
 
         currentHealth -= amount;
-        Debug.Log($"{name} took {amount} damage. HP: {currentHealth}/{maxHealth}");
+        Debug.Log($"[TroopHealth] {name} HP: {currentHealth}/{maxHealth} isDead={isDead}");
 
         if (healthBar != null) healthBar.Set(currentHealth);
 
@@ -35,6 +35,7 @@ public class TroopHealth : MonoBehaviour
         {
             currentHealth = 0;
             isDead = true;
+            Debug.Log($"[TroopHealth] {name} CALLING DIE NOW");
             Die();
         }
     }
@@ -43,7 +44,8 @@ public class TroopHealth : MonoBehaviour
     {
         foreach (var r in renderers) if (r != null) r.enabled = false;
         foreach (var c in colliders) if (c != null) c.enabled = false;
-        Debug.Log($"{name} died.");
+        Debug.Log($"[TroopHealth] {name} died and is being destroyed.");
+        Destroy(gameObject, 0.1f);
     }
 
     void OnValidate()
