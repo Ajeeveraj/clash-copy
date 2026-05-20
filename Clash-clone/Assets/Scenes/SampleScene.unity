@@ -506,6 +506,43 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &418259460 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+  m_PrefabInstance: {fileID: 1384330825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &418259468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418259460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
 --- !u!1 &512035826
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -805,7 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1008,7 +1045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1142,7 +1179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1186,7 +1223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.554484
+      value: 3.35
       objectReference: {fileID: 0}
     - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1194,7 +1231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.3347497
+      value: -8.05
       objectReference: {fileID: 0}
     - target: {fileID: 2772375973018485995, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1227,7 +1264,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 418259468}
   m_SourcePrefab: {fileID: 100100000, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
 --- !u!1 &1617420750
 GameObject:
@@ -1457,7 +1497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1474,6 +1514,7 @@ GameObject:
   - component: {fileID: 1648316501}
   - component: {fileID: 1648316500}
   - component: {fileID: 1648316499}
+  - component: {fileID: 1648316503}
   m_Layer: 0
   m_Name: BridgeLeft
   m_TagString: Untagged
@@ -1574,6 +1615,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1648316503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648316498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1684647684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,6 +1647,7 @@ GameObject:
   - component: {fileID: 1684647687}
   - component: {fileID: 1684647686}
   - component: {fileID: 1684647685}
+  - component: {fileID: 1684647689}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -1687,6 +1749,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1684647689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684647684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 2bee94bcc1e9531449506d900e815b24, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1738321532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,7 +1930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 7
+  attackRange: 10
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1853,6 +1947,7 @@ GameObject:
   - component: {fileID: 1793909323}
   - component: {fileID: 1793909322}
   - component: {fileID: 1793909321}
+  - component: {fileID: 1793909325}
   m_Layer: 0
   m_Name: BridgeRight
   m_TagString: Untagged
@@ -1953,6 +2048,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1793909325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793909320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &2048446134
 GameObject:
   m_ObjectHideFlags: 0
@@ -1965,6 +2080,7 @@ GameObject:
   - component: {fileID: 2048446137}
   - component: {fileID: 2048446136}
   - component: {fileID: 2048446135}
+  - component: {fileID: 2048446139}
   m_Layer: 0
   m_Name: River
   m_TagString: Untagged
@@ -2065,6 +2181,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2048446139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048446134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

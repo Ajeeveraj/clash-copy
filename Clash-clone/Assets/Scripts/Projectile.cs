@@ -9,27 +9,37 @@ public class Projectile : MonoBehaviour
 
     private Transform target;
     private float lifeTimer;
+    private bool hasHit = false;
 
-    public void SetTarget(Transform t) { target = t; }
+    // Store the actual health components at launch time
+    private TroopHealth troopTarget;
+    private TowerHealth towerTarget;
+
+    public void SetTarget(Transform t)
+    {
+        target = t;
+        // Cache the health component immediately so we always hit the right one
+        troopTarget = t.GetComponentInParent<TroopHealth>();
+        if (troopTarget == null)
+            towerTarget = t.GetComponentInParent<TowerHealth>();
+    }
 
     void Update()
     {
+        if (hasHit) return;
+
         lifeTimer += Time.deltaTime;
-        if (lifeTimer >= destroyAfter)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (lifeTimer >= destroyAfter) { Destroy(gameObject); return; }
 
-        if (target == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // Target died/disappeared before we hit it
+        if (target == null) { Destroy(gameObject); return; }
 
-        // If already overlapping target, apply damage directly
+        // Check if troop target is already dead
+        if (troopTarget != null && troopTarget.isDead) { Destroy(gameObject); return; }
+        if (towerTarget != null && towerTarget.isDestroyed) { Destroy(gameObject); return; }
+
         float dist = Vector3.Distance(transform.position, target.position);
-        if (dist < 0.2f)
+        if (dist < 0.3f)
         {
             HitTarget();
             return;
@@ -41,20 +51,16 @@ public class Projectile : MonoBehaviour
 
     private void HitTarget()
     {
-        var troop = target.GetComponentInParent<TroopHealth>();
-        if (troop != null)
-        {
-            troop.TakeDamage(damage);
-            Destroy(gameObject);
-            return;
-        }
+        if (hasHit) return;
+        hasHit = true;
 
-        var tower = target.GetComponentInParent<TowerHealth>();
-        if (tower != null)
+        if (troopTarget != null && !troopTarget.isDead)
         {
-            tower.TakeDamage(damage);
-            Destroy(gameObject);
-            return;
+            troopTarget.TakeDamage(damage);
+        }
+        else if (towerTarget != null && !towerTarget.isDestroyed)
+        {
+            towerTarget.TakeDamage(damage);
         }
 
         Destroy(gameObject);
@@ -62,24 +68,24 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        var troop = other.GetComponentInParent<TroopHealth>();
-        if (troop != null)
+        if (hasHit) return;
+
+        // Only damage the intended target, ignore everything else
+        if (troopTarget != null)
         {
-            troop.TakeDamage(damage);
-            Destroy(gameObject);
-            return;
+            TroopHealth th = other.GetComponentInParent<TroopHealth>();
+            if (th != troopTarget) return; // not our target, ignore
         }
 
-        var tower = other.GetComponentInParent<TowerHealth>();
-        if (tower != null)
+        if (towerTarget != null)
         {
-            tower.TakeDamage(damage);
-            Destroy(gameObject);
-            return;
+            TowerHealth tw = other.GetComponentInParent<TowerHealth>();
+            if (tw != towerTarget) return; // not our target, ignore
         }
+
+        HitTarget();
     }
 }
-
 
 
 
