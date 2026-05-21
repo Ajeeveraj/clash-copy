@@ -35,7 +35,7 @@ public class TowerAttack : MonoBehaviour
 
         Transform closest = null;
         float closestDist = Mathf.Infinity;
-        Vector3 towerPos = transform.position;
+        Vector3 towerPos = shootPoint.position;
 
         foreach (GameObject t in troops)
         {
@@ -52,15 +52,15 @@ public class TowerAttack : MonoBehaviour
             }
         } // foreach ends here
 
-        if (closest == null) return;
+       if (closest == null) return;
 
-        Debug.Log($"Distance to troop: {closestDist}, attackRange: {attackRange}");
+        Debug.Log($"{gameObject.name} Distance to troop: {closestDist}, attackRange: {attackRange}"); // REPLACE THIS LINE
 
         if (closestDist > attackRange)
-    {
+        {
         Debug.Log("OUT OF RANGE - should not fire");
         return;
-    }
+        }
 
 Debug.Log("IN RANGE - firing");
 cooldownTimer = attackCooldown;

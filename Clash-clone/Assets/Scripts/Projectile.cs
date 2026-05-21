@@ -11,17 +11,18 @@ public class Projectile : MonoBehaviour
     private float lifeTimer;
     private bool hasHit = false;
 
-    // Store the actual health components at launch time
     private TroopHealth troopTarget;
     private TowerHealth towerTarget;
 
     public void SetTarget(Transform t)
     {
         target = t;
-        // Cache the health component immediately so we always hit the right one
         troopTarget = t.GetComponentInParent<TroopHealth>();
         if (troopTarget == null)
             towerTarget = t.GetComponentInParent<TowerHealth>();
+
+        float initialDist = Vector3.Distance(transform.position, t.position);
+        Debug.Log($"Projectile spawned, initial distance to target: {initialDist}");
     }
 
     void Update()
@@ -31,10 +32,8 @@ public class Projectile : MonoBehaviour
         lifeTimer += Time.deltaTime;
         if (lifeTimer >= destroyAfter) { Destroy(gameObject); return; }
 
-        // Target died/disappeared before we hit it
         if (target == null) { Destroy(gameObject); return; }
 
-        // Check if troop target is already dead
         if (troopTarget != null && troopTarget.isDead) { Destroy(gameObject); return; }
         if (towerTarget != null && towerTarget.isDestroyed) { Destroy(gameObject); return; }
 
@@ -55,13 +54,9 @@ public class Projectile : MonoBehaviour
         hasHit = true;
 
         if (troopTarget != null && !troopTarget.isDead)
-        {
             troopTarget.TakeDamage(damage);
-        }
         else if (towerTarget != null && !towerTarget.isDestroyed)
-        {
             towerTarget.TakeDamage(damage);
-        }
 
         Destroy(gameObject);
     }
@@ -70,17 +65,16 @@ public class Projectile : MonoBehaviour
     {
         if (hasHit) return;
 
-        // Only damage the intended target, ignore everything else
         if (troopTarget != null)
         {
             TroopHealth th = other.GetComponentInParent<TroopHealth>();
-            if (th != troopTarget) return; // not our target, ignore
+            if (th != troopTarget) return;
         }
 
         if (towerTarget != null)
         {
             TowerHealth tw = other.GetComponentInParent<TowerHealth>();
-            if (tw != towerTarget) return; // not our target, ignore
+            if (tw != towerTarget) return;
         }
 
         HitTarget();
