@@ -3,11 +3,16 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class TowerAttack : MonoBehaviour
 {
-    public float attackRange = 7f;
+    public float attackRange = 10f;
     public float attackCooldown = 1f;
     public GameObject projectilePrefab;
     public Transform shootPoint;
     public string targetTag = "Troop";
+    public bool isKingTower = false;
+
+    [Header("King Tower Only")]
+    public TowerHealth princessTower1;
+    public TowerHealth princessTower2;
 
     private float cooldownTimer = 0f;
     private TowerHealth towerHealth;
@@ -16,16 +21,19 @@ public class TowerAttack : MonoBehaviour
     {
         towerHealth = GetComponent<TowerHealth>();
         if (shootPoint == null) shootPoint = transform;
-
-        TowerAttack[] all = GetComponents<TowerAttack>();
-        if (all.Length > 1)
-            Debug.LogError($"{name} has {all.Length} TowerAttack components! Remove duplicates.");
     }
 
     void Update()
     {
         if (towerHealth != null && towerHealth.isDestroyed) return;
         if (projectilePrefab == null) return;
+
+        if (isKingTower)
+        {
+            bool p1Alive = princessTower1 != null && !princessTower1.isDestroyed;
+            bool p2Alive = princessTower2 != null && !princessTower2.isDestroyed;
+            if (p1Alive || p2Alive) return;
+        }
 
         cooldownTimer -= Time.deltaTime;
         if (cooldownTimer > 0f) return;
@@ -43,34 +51,27 @@ public class TowerAttack : MonoBehaviour
             if (th != null && th.isDead) continue;
 
             float dist = Vector3.Distance(towerPos, t.transform.position);
-            Debug.Log($"Troop {t.name} is {dist} units away");
-
             if (dist < closestDist)
             {
                 closestDist = dist;
                 closest = t.transform;
             }
-        } // foreach ends here
-
-       if (closest == null) return;
-
-        Debug.Log($"{gameObject.name} Distance to troop: {closestDist}, attackRange: {attackRange}"); // REPLACE THIS LINE
-
-        if (closestDist > attackRange)
-        {
-        Debug.Log("OUT OF RANGE - should not fire");
-        return;
         }
 
-Debug.Log("IN RANGE - firing");
-cooldownTimer = attackCooldown;
+        if (closest == null) return;
+        if (closestDist > attackRange) return;
+
+        // Lane check - only fire at troops on my side of the map
+        if (shootPoint.position.x > 0 && closest.position.x < 0) return;
+        if (shootPoint.position.x < 0 && closest.position.x > 0) return;
+
+        cooldownTimer = attackCooldown;
         GameObject p = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
         Projectile proj = p.GetComponent<Projectile>();
         if (proj != null) proj.SetTarget(closest);
         Debug.Log($"{name} fired at {closest.name} (dist {closestDist:F1}).");
     }
 }
-
 
 
 
