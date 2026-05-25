@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 512035831}
   m_Layer: 0
   m_Name: KingTower (1)
-  m_TagString: Untagged
+  m_TagString: EnemyTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1072,7 +1072,7 @@ GameObject:
   - component: {fileID: 1313247791}
   m_Layer: 0
   m_Name: PrincessTowerRight (2)
-  m_TagString: EnemyTowerRight
+  m_TagString: EnemyTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1409,7 +1409,7 @@ GameObject:
   - component: {fileID: 1641270888}
   m_Layer: 0
   m_Name: PrincessTowerLeft (2)
-  m_TagString: EnemyTowerLeft
+  m_TagString: EnemyTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1526,7 +1526,7 @@ MonoBehaviour:
   currentHealth: 0
   isDestroyed: 0
   deathVFX: {fileID: 0}
-  destroyOnDeath: 0
+  destroyOnDeath: 1
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -1538,7 +1538,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641270883}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
@@ -1732,12 +1732,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
   m_SerializedVersion: 1
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_StartPoint: {x: 0, y: 0, z: -1.6}
+  m_EndPoint: {x: 0, y: 0, z: 1.6}
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
   m_Activated: 1
-  m_Width: 0
+  m_Width: 2
   m_CostModifier: 1
   m_IsOverridingCost: 0
   m_Bidirectional: 1
@@ -2440,8 +2440,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 330585546}
   - {fileID: 410087041}
-  - {fileID: 832575519}
   - {fileID: 1684647688}
+  - {fileID: 832575519}
   - {fileID: 2048446138}
   - {fileID: 1648316502}
   - {fileID: 1793909324}
