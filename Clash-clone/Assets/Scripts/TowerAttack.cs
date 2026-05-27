@@ -40,7 +40,6 @@ public class TowerAttack : MonoBehaviour
 
         GameObject[] troops = GameObject.FindGameObjectsWithTag(targetTag);
         if (troops == null || troops.Length == 0) return;
-        Debug.Log($"{gameObject.name} found {troops.Length} troops");
 
         Transform closest = null;
         float closestDist = Mathf.Infinity;
@@ -59,17 +58,13 @@ public class TowerAttack : MonoBehaviour
         }
 
         if (closest == null) return;
-        Debug.Log($"{gameObject.name} closestDist={closestDist} attackRange={attackRange}");
         if (closestDist > attackRange) return;
-        Debug.Log($"{gameObject.name} troop in range at dist {closestDist}");
 
         cooldownTimer = attackCooldown;
         GameObject p = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
         Projectile proj = p.GetComponent<Projectile>();
         if (proj != null) proj.SetTarget(closest);
-        Debug.Log($"{name} fired at {closest.name} (dist {closestDist:F1}).");
     }
 }
-
 
 

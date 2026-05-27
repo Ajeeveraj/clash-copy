@@ -29,7 +29,7 @@ public class TroopAttack : MonoBehaviour
             {
                 closestDist = dist;
                 targetTower = t.transform;
-                targetHealth = t.GetComponentInParent<TowerHealth>();
+                targetHealth = t.GetComponent<TowerHealth>();
             }
         }
 

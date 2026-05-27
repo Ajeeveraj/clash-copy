@@ -18,9 +18,14 @@ public class TroopMovement : MonoBehaviour
         agent.speed = moveSpeed;
         agent.stoppingDistance = 1.2f;
 
-        // Find closest enemy tower
+        FindClosestTower();
+    }
+
+    void FindClosestTower()
+    {
         GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
         float closestDist = Mathf.Infinity;
+        targetTower = null;
 
         foreach (GameObject tower in towers)
         {
@@ -45,31 +50,8 @@ public class TroopMovement : MonoBehaviour
     {
         if (agent == null || targetTower == null) return;
 
-        // Retarget if current tower is destroyed
         TowerHealth th = targetTower.GetComponent<TowerHealth>();
-        if (th != null && th.isDestroyed)
-        {
-            // Find next closest tower
-            GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
-            float closestDist = Mathf.Infinity;
-            targetTower = null;
-
-            foreach (GameObject tower in towers)
-            {
-                TowerHealth t = tower.GetComponent<TowerHealth>();
-                if (t != null && t.isDestroyed) continue;
-
-                float dist = Vector3.Distance(transform.position, tower.transform.position);
-                if (dist < closestDist)
-                {
-                    closestDist = dist;
-                    targetTower = tower.transform;
-                }
-            }
-
-            if (targetTower != null)
-                agent.SetDestination(targetTower.position);
-        }
+        if (th != null && th.isDestroyed) FindClosestTower();
 
         if (agent.velocity.sqrMagnitude > 0.1f)
         {

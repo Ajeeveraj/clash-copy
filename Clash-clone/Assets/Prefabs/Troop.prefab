@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8620682437409072745}
   - component: {fileID: -6619827321356549101}
   - component: {fileID: 6424069251167972979}
+  - component: {fileID: 5966447449720613910}
   m_Layer: 0
   m_Name: Troop
   m_TagString: Troop
@@ -198,6 +199,22 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5966447449720613910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653685239389759972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e736392825ea64b43967fd9d24fec1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TroopAttack
+  damage: 40
+  attackRange: 3
+  attackCooldown: 1
+  enemyTowerTag: EnemyTower
 --- !u!1001 &3438809403372367417
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -43,6 +43,7 @@ public class TowerHealth : MonoBehaviour
         {
             currentHealth = 0;
             isDestroyed = true;
+            Debug.Log($"{name} took {amount} damage. HP: {currentHealth}/{maxHealth} isDestroyed={isDestroyed}");
             Die();
         }
     }
