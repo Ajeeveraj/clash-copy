@@ -654,7 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  attackRange: 10
+  attackRange: 18
   attackCooldown: 1
   projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
   shootPoint: {fileID: 66441500}
@@ -1278,14 +1278,61 @@ PrefabInstance:
       propertyPath: m_Acceleration
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6424069251167972979, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2068246180}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+--- !u!1 &1456682201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1456682203}
+  - component: {fileID: 1456682202}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1456682202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456682201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8714bd37749a6489eb855f2acb9423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  enemyKingTower: {fileID: 512035831}
+  playerKingTower: {fileID: 761542681}
+--- !u!4 &1456682203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456682201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.45203, y: 0, z: -8.61206}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617420750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,27 +2453,6 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
---- !u!1 &2068246171 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-  m_PrefabInstance: {fileID: 1384330825}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2068246180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068246171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e736392825ea64b43967fd9d24fec1d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TroopAttack
-  damage: 40
-  attackRange: 1.5
-  attackCooldown: 1
-  enemyTowerTag: EnemyTower
 --- !u!1 &2091804563
 GameObject:
   m_ObjectHideFlags: 0
@@ -2472,3 +2498,4 @@ SceneRoots:
   - {fileID: 133515211}
   - {fileID: 1384330825}
   - {fileID: 1617420753}
+  - {fileID: 1456682203}

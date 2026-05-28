@@ -13,33 +13,20 @@ public class TroopAttack : MonoBehaviour
 
     void Start()
     {
-        // find closest enemy tower (works with multiple towers)
-        GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
-        if (towers.Length == 0)
-        {
-            Debug.LogError("No towers with tag " + enemyTowerTag + " found!");
-            return;
-        }
-
-        float closestDist = Mathf.Infinity;
-        foreach (GameObject t in towers)
-        {
-            float dist = Vector3.Distance(transform.position, t.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                targetTower = t.transform;
-                targetHealth = t.GetComponent<TowerHealth>();
-            }
-        }
-
-        if (targetHealth == null) Debug.LogError("TowerHealth NOT found on parent tower!");
+        // Find the initial target when spawning
+        FindClosestTower();
     }
 
     void Update()
     {
-        if (targetTower == null || targetHealth == null) return;
-        if (targetHealth.isDestroyed) return;
+        // If we don't have a target, or our current target is dead, look for a new one!
+        if (targetTower == null || targetHealth == null || targetHealth.isDestroyed)
+        {
+            FindClosestTower();
+            
+            // If there are literally no towers left on the map, stop acting
+            if (targetTower == null || targetHealth == null) return;
+        }
 
         cooldownTimer -= Time.deltaTime;
         float distance = Vector3.Distance(transform.position, targetTower.position);
@@ -51,8 +38,48 @@ public class TroopAttack : MonoBehaviour
             Debug.Log($"{gameObject.name} attacked {targetTower.name} for {damage}");
         }
     }
-}
 
+    // Moved the target finding logic into its own reusable method
+    void FindClosestTower()
+    {
+        GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
+        if (towers.Length == 0)
+        {
+            targetTower = null;
+            targetHealth = null;
+            return;
+        }
+
+        float closestDist = Mathf.Infinity;
+        Transform bestTower = null;
+        TowerHealth bestHealth = null;
+
+        foreach (GameObject t in towers)
+        {
+            TowerHealth th = t.GetComponent<TowerHealth>();
+            
+            // Skip towers that are already dead!
+            if (th == null || th.isDestroyed) continue;
+
+            float dist = Vector3.Distance(transform.position, t.transform.position);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                bestTower = t.transform;
+                bestHealth = th;
+            }
+        }
+
+        // Assign the new active target
+        targetTower = bestTower;
+        targetHealth = bestHealth;
+
+        if (targetHealth == null && towers.Length > 0) 
+        {
+            Debug.LogError("TowerHealth NOT found on nearby towers!");
+        }
+    }
+}
 
 
 
