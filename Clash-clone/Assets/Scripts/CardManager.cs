@@ -1,39 +1,67 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for using the Image component
+using UnityEngine.UI;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public Image elixirFillImage; // Drag your 'Fill' object here in the Inspector
+    [Header("UI Reference")]
+    public Slider elixirSlider;
+    public TextMeshProUGUI elixirText; 
 
-    [Header("Elixir Settings")]
-    public float currentElixir = 0f;
+    [Header("Settings")]
     public float maxElixir = 10f;
-    public float elixirRegenSpeed = 1f; // How fast elixir builds up per second
+    public float startingElixir = 5f;
+    public float elixirRegenSpeed = 1f; // 1 elixir per second
+
+    private float currentElixir;
+
+    void Start()
+    {
+        currentElixir = startingElixir;
+
+        if (elixirSlider != null)
+        {
+            elixirSlider.maxValue = maxElixir;
+            elixirSlider.value = currentElixir;
+        }
+    }
 
     void Update()
     {
-        RegenerateElixir();
-        UpdateElixirUI();
-    }
-
-    void RegenerateElixir()
-    {
         if (currentElixir < maxElixir)
         {
-            currentElixir += elixirRegenSpeed * Time.deltaTime;
+            // Regenerate elixir over time
+            currentElixir += Time.deltaTime * elixirRegenSpeed;
+            currentElixir = Mathf.Min(currentElixir, maxElixir);
             
-            // Clamp the value so it never goes past the maximum limit
-            currentElixir = Mathf.Clamp(currentElixir, 0f, maxElixir);
+            // Update the Slider
+            if (elixirSlider != null)
+            {
+                elixirSlider.value = currentElixir;
+            }
+
+            // Update the Text Number
+            if (elixirText != null)
+            {
+                elixirText.text = Mathf.FloorToInt(currentElixir).ToString();
+            }
         }
     }
 
-    void UpdateElixirUI()
+    // Call this when you deploy a card!
+    public bool SpendElixir(float amount)
     {
-        if (elixirFillImage != null)
+        if (currentElixir >= amount)
         {
-            // Converts elixir to a percentage between 0.0 and 1.0
-            elixirFillImage.fillAmount = currentElixir / maxElixir;
+            currentElixir -= amount;
+            if (elixirSlider != null)
+            {
+                elixirSlider.value = currentElixir;
+            }
+            return true;
         }
+        
+        Debug.Log("Not enough elixir!");
+        return false;
     }
 }
