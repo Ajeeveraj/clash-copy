@@ -14,7 +14,8 @@ public class TowerHealth : MonoBehaviour
     public bool destroyOnDeath = false;
     public UnityEvent onDestroyed;
 
-    // UI hook (optional): assign a HealthBar component on the same GameObject or child
+    public bool isKingTower = false;
+
     public HealthBar healthBar;
 
     private Renderer[] renderers;

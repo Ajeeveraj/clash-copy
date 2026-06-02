@@ -13,7 +13,9 @@ public class TroopMovement : MonoBehaviour
     public Transform targetTower; 
     
     private NavMeshAgent agent;
-    private TowerAttack targetTowerAttack; // To check if the target is a King Tower
+    
+    // FIX: Changed from TowerAttack to TowerHealth so we look at the right script!
+    private TowerHealth targetTowerHealth; 
 
     void Start()
     {
@@ -30,7 +32,7 @@ public class TroopMovement : MonoBehaviour
     void Update()
     {
         // 1. If we lose our target or it gets destroyed, look for the next closest one (the King Tower)
-        if (targetTower == null || targetTower.GetComponent<TowerHealth>() == null || targetTower.GetComponent<TowerHealth>().isDestroyed)
+        if (targetTower == null || targetTowerHealth == null || targetTowerHealth.isDestroyed)
         {
             FindNextTarget();
         }
@@ -38,13 +40,15 @@ public class TroopMovement : MonoBehaviour
         if (agent == null || targetTower == null) return;
 
         // 2. Adjust stopping distance dynamically based on tower type
-        if (targetTowerAttack != null && targetTowerAttack.isKingTower)
+        // FIX: Now we securely read isKingTower from the TowerHealth component
+        if (targetTowerHealth != null && targetTowerHealth.isKingTower)
         {
             // Give the massive King Tower a much larger stopping cushion
             agent.stoppingDistance = 3.5f; 
         }
         else
         {
+            // Reset to default for standard princess towers
             agent.stoppingDistance = 1.2f;
         }
 
@@ -67,7 +71,8 @@ public class TroopMovement : MonoBehaviour
         if (towerObj != null)
         {
             targetTower = towerObj.transform;
-            targetTowerAttack = towerObj.GetComponent<TowerAttack>();
+            // FIX: Grab the TowerHealth component instead of TowerAttack
+            targetTowerHealth = towerObj.GetComponent<TowerHealth>();
         }
     }
 
@@ -88,7 +93,7 @@ public class TroopMovement : MonoBehaviour
                 if (dist < closestDist)
                 {
                     closestDist = dist;
-                    closestTower = t; // <-- Fixed typo here!
+                    closestTower = t; 
                 }
             }
         }
@@ -96,8 +101,8 @@ public class TroopMovement : MonoBehaviour
         if (closestTower != null)
         {
             targetTower = closestTower.transform;
-            targetTowerAttack = closestTower.GetComponent<TowerAttack>();
+            // FIX: Track the new target's health script component cleanly
+            targetTowerHealth = closestTower.GetComponent<TowerHealth>();
         }
     }
 }
-

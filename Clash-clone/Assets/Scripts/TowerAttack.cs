@@ -1,121 +1,125 @@
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class TowerAttack : MonoBehaviour
 {
-    public float attackRange = 12f;
-    public float attackCooldown = 1f;
-    public GameObject projectilePrefab;
-    public Transform shootPoint;
-    public string targetTag = "Troop";
-    public bool isKingTower = false;
+    [Header("Shooting Settings")]
+    public GameObject projectilePrefab; 
+    public Transform firePoint;         
+    public float attackRange = 7f;
+    public float fireRate = 1f;
+    private float nextFireTime = 0f;
 
-    [Header("King Tower & Lane Setup")]
-    public TowerHealth princessTower1;
-    public TowerHealth princessTower2;
+    [Header("Team Setup")]
+    [Tooltip("Check this box if this tower belongs to the PLAYER.")]
+    public bool isPlayerTower = false;
 
-    private float cooldownTimer = 0f;
-    private TowerHealth towerHealth;
-    private float maxHealthCache;
+    [Tooltip("Check this box if this tower belongs to the ENEMY AI.")]
+    public bool isEnemyTower = false;
+    
+    private Transform currentTarget;
 
-    void Awake()
-    {
-        towerHealth = GetComponent<TowerHealth>();
-        if (shootPoint == null) shootPoint = transform;
-    }
-
-    void Start()
-    {
-        if (towerHealth != null)
-        {
-            maxHealthCache = towerHealth.maxHealth;
-        }
-    }
+    // Hardcoded team tags to guarantee no inspector mistakes
+    private const string PLAYER_TROOP_TAG = "Troop";
+    private const string ENEMY_TROOP_TAG = "EnemyTroop";
 
     void Update()
     {
-        if (towerHealth != null && towerHealth.isDestroyed) return;
-        if (projectilePrefab == null) return;
-
-        // --- KING TOWER WAKE UP LOGIC ---
-        if (isKingTower && towerHealth != null)
+        // Find a target if we don't have one, or if it walks out of range
+        if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.position) > attackRange)
         {
-            bool p1Alive = princessTower1 != null && !princessTower1.isDestroyed;
-            bool p2Alive = princessTower2 != null && !princessTower2.isDestroyed;
+            FindNearestValidTarget();
+        }
+
+        // Aim and fire at the target
+        if (currentTarget != null)
+        {
+            Vector3 targetDir = currentTarget.position - transform.position;
+            targetDir.y = 0; 
             
-            bool hasBeenDamaged = towerHealth.currentHealth < maxHealthCache;
-
-            if (hasBeenDamaged)
+            if (targetDir != Vector3.zero)
             {
-                // King is awake! Let execution pass down to targeting logic
+                // Forces the front of the tower asset to face the incoming troop
+                Quaternion targetRotation = Quaternion.LookRotation(-targetDir); 
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
-            else if (p1Alive || p2Alive)
+
+            if (Time.time >= nextFireTime)
             {
-                return; // Stay asleep if princess towers are alive and untargeted
-            }
-        }
-
-        cooldownTimer -= Time.deltaTime;
-        if (cooldownTimer > 0f) return;
-
-        // --- TARGETING LOGIC ---
-        GameObject[] troops = GameObject.FindGameObjectsWithTag(targetTag);
-        if (troops == null || troops.Length == 0) return;
-
-        Transform closest = null;
-        float closestDist = Mathf.Infinity;
-        Vector3 towerPos = shootPoint.position;
-
-        foreach (GameObject t in troops)
-        {
-            TroopHealth th = t.GetComponent<TroopHealth>();
-            if (th != null && th.isDead) continue;
-
-            float dist = Vector3.Distance(towerPos, t.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                closest = t.transform;
+                Shoot();
+                nextFireTime = Time.time + 1f / fireRate;
             }
         }
+    }
 
-        if (closest == null) return;
-        if (closestDist > attackRange) return;
+    void FindNearestValidTarget()
+    {
+        string targetTag = "";
 
-        // --- FIXED LANE CHECK ---
-        if (!isKingTower)
+        if (isPlayerTower)
         {
-            // OVERRIDE RULE: If the troop is targeted on the King Tower, Princesses ignore it.
-            TroopMovement movement = closest.GetComponent<TroopMovement>();
-            if (movement != null && movement.targetTower != null)
-            {
-                TowerAttack targetTowerAttack = movement.targetTower.GetComponent<TowerAttack>();
-                if (targetTowerAttack != null && targetTowerAttack.isKingTower)
-                {
-                    return; // The troop is tracking the King Tower! Princess stands down.
-                }
-            }
+            // Player towers ONLY target enemy units
+            targetTag = ENEMY_TROOP_TAG;
+        }
+        else if (isEnemyTower)
+        {
+            // Enemy towers ONLY target player units
+            targetTag = PLAYER_TROOP_TAG;
+        }
+        else
+        {
+            return;
+        }
 
-            // Standard distance-based lane check fallback
-            TowerHealth oppositePrincess = (GetComponent<TowerHealth>() == princessTower1) ? princessTower2 : princessTower1;
-            if (oppositePrincess != null)
-            {
-                float distToMeX = Mathf.Abs(closest.position.x - transform.position.x);
-                float distToOppositeX = Mathf.Abs(closest.position.x - oppositePrincess.transform.position.x);
+        GameObject[] targets = GameObject.FindGameObjectsWithTag(targetTag);
+        float closestDistance = Mathf.Infinity;
+        GameObject closestTroop = null;
 
-                if (distToOppositeX < distToMeX) 
+        foreach (GameObject troop in targets)
+        {
+            if (troop != null)
+            {
+                TroopHealth th = troop.GetComponentInParent<TroopHealth>();
+                if (th != null && th.isDead) continue;
+
+                float distance = Vector3.Distance(transform.position, troop.transform.position);
+                if (distance < closestDistance)
                 {
-                    return; 
+                    closestDistance = distance;
+                    closestTroop = troop;
                 }
             }
         }
 
-        // --- FIRE PROJECTILE ---
-        cooldownTimer = attackCooldown;
-        GameObject p = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
-        Projectile proj = p.GetComponent<Projectile>();
-        if (proj != null) proj.SetTarget(closest);
+        if (closestTroop != null && closestDistance <= attackRange)
+        {
+            currentTarget = closestTroop.transform;
+        }
+        else
+        {
+            currentTarget = null;
+        }
+    }
 
-        Debug.Log($"{name} fired a defense shot at {closest.name}!");
+    void Shoot()
+    {
+        if (projectilePrefab != null && firePoint != null && currentTarget != null)
+        {
+            GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            
+            Projectile projectileScript = proj.GetComponent<Projectile>();
+            if (projectileScript != null)
+            {
+                projectileScript.SetTarget(currentTarget);
+            }
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (isPlayerTower) Gizmos.color = Color.blue;
+        else if (isEnemyTower) Gizmos.color = Color.red;
+        else Gizmos.color = Color.yellow;
+
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
