@@ -38,9 +38,7 @@ public class TowerAttack : MonoBehaviour
             
             if (targetDir != Vector3.zero)
             {
-                // Forces the front of the tower asset to face the incoming troop
-                Quaternion targetRotation = Quaternion.LookRotation(-targetDir); 
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                
             }
 
             if (Time.time >= nextFireTime)

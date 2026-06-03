@@ -1,61 +1,60 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections; // FIXED: Cleaned up the typo here!
 
 [DisallowMultipleComponent]
 public class TroopMovement : MonoBehaviour
 {
-    public float moveSpeed = 2f;
-    public string leftTowerTag = "EnemyTowerLeft";
-    public string rightTowerTag = "EnemyTowerRight";
-    public float mapCenterX = 8f;
+    [Header("Team Settings")]
+    public bool isEnemy = false; 
 
-    // Changed to public so TowerAttack can read what this troop is targeting
+    [Header("Movement Settings")]
+    public float moveSpeed = 2f;
+
+    [Header("Targeting")]
     public Transform targetTower; 
     
     private NavMeshAgent agent;
-    
-    // FIX: Changed from TowerAttack to TowerHealth so we look at the right script!
     private TowerHealth targetTowerHealth; 
+    private string masterTowerTag;
+    private bool isResettingPath = false;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         if (agent == null) { Debug.LogError("No NavMeshAgent!"); return; }
         agent.speed = moveSpeed;
-        
-        // Default stopping distance for normal princess towers
         agent.stoppingDistance = 1.2f;
 
-        SetInitialTarget();
+        masterTowerTag = isEnemy ? "PlayerTower" : "EnemyTower";
+        FindNextTarget();
     }
 
     void Update()
     {
-        // 1. If we lose our target or it gets destroyed, look for the next closest one (the King Tower)
+        // Check if our current target is dead or missing
         if (targetTower == null || targetTowerHealth == null || targetTowerHealth.isDestroyed)
         {
-            FindNextTarget();
+            if (!isResettingPath)
+            {
+                StartCoroutine(ForceHardPathReset());
+            }
+            return;
         }
 
-        if (agent == null || targetTower == null) return;
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh || targetTower == null) return;
 
-        // 2. Adjust stopping distance dynamically based on tower type
-        // FIX: Now we securely read isKingTower from the TowerHealth component
         if (targetTowerHealth != null && targetTowerHealth.isKingTower)
         {
-            // Give the massive King Tower a much larger stopping cushion
             agent.stoppingDistance = 3.5f; 
         }
         else
         {
-            // Reset to default for standard princess towers
             agent.stoppingDistance = 1.2f;
         }
 
-        // 3. Keep updating the path destination
         agent.SetDestination(targetTower.position);
 
-        // 4. Handle smooth rotation
         if (agent.velocity.sqrMagnitude > 0.1f)
         {
             Vector3 dir = agent.velocity;
@@ -64,22 +63,39 @@ public class TroopMovement : MonoBehaviour
         }
     }
 
-    void SetInitialTarget()
+    // Coroutine to break the spawnpoint tracking loop completely
+    IEnumerator ForceHardPathReset()
     {
-        string tag = transform.position.x >= mapCenterX ? rightTowerTag : leftTowerTag;
-        GameObject towerObj = GameObject.FindWithTag(tag);
-        if (towerObj != null)
+        isResettingPath = true;
+
+        if (agent != null)
         {
-            targetTower = towerObj.transform;
-            // FIX: Grab the TowerHealth component instead of TowerAttack
-            targetTowerHealth = towerObj.GetComponent<TowerHealth>();
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
+            agent.enabled = false; // Turn off to sever the link to the original spawn point
         }
+
+        FindNextTarget();
+
+        // Wait exactly one physics frame
+        yield return new WaitForEndOfFrame();
+
+        if (agent != null)
+        {
+            agent.enabled = true; // Turn back on at current location
+            
+            if (targetTower != null && agent.isOnNavMesh)
+            {
+                agent.SetDestination(targetTower.position);
+            }
+        }
+
+        isResettingPath = false;
     }
 
     void FindNextTarget()
     {
-        // Search for any remaining active enemy towers (like the King Tower)
-        GameObject[] towers = GameObject.FindGameObjectsWithTag("EnemyTower"); 
+        GameObject[] towers = GameObject.FindGameObjectsWithTag(masterTowerTag); 
         
         float closestDist = Mathf.Infinity;
         GameObject closestTower = null;
@@ -101,7 +117,6 @@ public class TroopMovement : MonoBehaviour
         if (closestTower != null)
         {
             targetTower = closestTower.transform;
-            // FIX: Track the new target's health script component cleanly
             targetTowerHealth = closestTower.GetComponent<TowerHealth>();
         }
     }

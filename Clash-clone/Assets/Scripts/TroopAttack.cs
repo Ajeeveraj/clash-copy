@@ -1,87 +1,120 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TroopAttack : MonoBehaviour
 {
-    public int damage = 40;
-    public float attackRange = 1.5f;
-    public float attackCooldown = 1f;
-    public string enemyTowerTag = "EnemyTower";
+    [Header("Team Settings")]
+    public bool isEnemy = false; 
 
-    private float cooldownTimer = 0f;
-    private Transform targetTower;
-    private TowerHealth targetHealth;
+    [Header("Targeting Settings")]
+    public float attackRange = 2.5f; 
+    private GameObject currentTarget;
 
-    void Start()
-    {
-        // Find the initial target when spawning
-        FindClosestTower();
-    }
+    [Header("Combat Settings")]
+    public int damage = 10; 
+    public float attackSpeed = 1.5f; 
+    private float attackCooldown;
 
     void Update()
     {
-        // If we don't have a target, or our current target is dead, look for a new one!
-        if (targetTower == null || targetHealth == null || targetHealth.isDestroyed)
+        // FIX: If the target is destroyed, dump the reference instantly!
+        if (currentTarget != null)
         {
-            FindClosestTower();
-            
-            // If there are literally no towers left on the map, stop acting
-            if (targetTower == null || targetHealth == null) return;
-        }
-
-        cooldownTimer -= Time.deltaTime;
-        float distance = Vector3.Distance(transform.position, targetTower.position);
-
-        if (distance <= attackRange && cooldownTimer <= 0f)
-        {
-            cooldownTimer = attackCooldown;
-            targetHealth.TakeDamage(damage);
-            Debug.Log($"{gameObject.name} attacked {targetTower.name} for {damage}");
-        }
-    }
-
-    // Moved the target finding logic into its own reusable method
-    void FindClosestTower()
-    {
-        GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
-        if (towers.Length == 0)
-        {
-            targetTower = null;
-            targetHealth = null;
-            return;
-        }
-
-        float closestDist = Mathf.Infinity;
-        Transform bestTower = null;
-        TowerHealth bestHealth = null;
-
-        foreach (GameObject t in towers)
-        {
-            TowerHealth th = t.GetComponent<TowerHealth>();
-            
-            // Skip towers that are already dead!
-            if (th == null || th.isDestroyed) continue;
-
-            float dist = Vector3.Distance(transform.position, t.transform.position);
-            if (dist < closestDist)
+            TowerHealth towerHealth = currentTarget.GetComponent<TowerHealth>();
+            if (towerHealth != null && towerHealth.isDestroyed)
             {
-                closestDist = dist;
-                bestTower = t.transform;
-                bestHealth = th;
+                currentTarget = null; // Drop dead target
             }
         }
 
-        // Assign the new active target
-        targetTower = bestTower;
-        targetHealth = bestHealth;
-
-        if (targetHealth == null && towers.Length > 0) 
+        // If we have no target, find a new valid one immediately
+        if (currentTarget == null)
         {
-            Debug.LogError("TowerHealth NOT found on nearby towers!");
+            FindTarget();
+        }
+        else
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.transform.position);
+            
+            if (distanceToTarget <= attackRange)
+            {
+                attackCooldown -= Time.deltaTime;
+                if (attackCooldown <= 0f)
+                {
+                    AttackTarget();
+                    attackCooldown = attackSpeed; 
+                }
+            }
+        }
+    }
+
+    void FindTarget()
+    {
+        List<string> targetTags = new List<string>();
+
+        if (isEnemy)
+        {
+            targetTags.Add("Troop");
+            targetTags.Add("PlayerTower"); 
+        }
+        else
+        {
+            targetTags.Add("EnemyTroop");
+            targetTags.Add("EnemyTower"); 
+        }
+
+        List<GameObject> potentialTargets = new List<GameObject>();
+        foreach (string tag in targetTags)
+        {
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
+            potentialTargets.AddRange(objectsWithTag);
+        }
+
+        GameObject closestTarget = null;
+        float shortestDistance = Mathf.Infinity;
+        Vector3 currentPosition = transform.position;
+
+        foreach (GameObject potentialTarget in potentialTargets)
+        {
+            if (potentialTarget != null)
+            {
+                TowerHealth towerHealth = potentialTarget.GetComponent<TowerHealth>();
+                if (towerHealth != null && towerHealth.isDestroyed)
+                {
+                    continue; 
+                }
+
+                float distanceToEnemy = Vector3.Distance(currentPosition, potentialTarget.transform.position);
+                if (distanceToEnemy < shortestDistance)
+                {
+                    shortestDistance = distanceToEnemy;
+                    closestTarget = potentialTarget;
+                }
+            }
+        }
+
+        currentTarget = closestTarget;
+    }
+
+    void AttackTarget()
+    {
+        if (currentTarget == null) return;
+
+        TowerHealth tower = currentTarget.GetComponent<TowerHealth>();
+        if (tower != null)
+        {
+            tower.TakeDamage(damage); 
+            Debug.Log($"{gameObject.name} attacked Tower for {damage} damage!");
+            return;
+        }
+
+        TroopHealth troop = currentTarget.GetComponent<TroopHealth>();
+        if (troop != null)
+        {
+            troop.TakeDamage(damage);
+            Debug.Log($"{gameObject.name} attacked opposing Troop for {damage} damage!");
         }
     }
 }
-
-
-
 
 
