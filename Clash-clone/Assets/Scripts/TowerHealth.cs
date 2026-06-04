@@ -1,83 +1,54 @@
 using UnityEngine;
-using UnityEngine.Events;
 
-[DisallowMultipleComponent]
 public class TowerHealth : MonoBehaviour
 {
-    [Header("Health")]
-    public int maxHealth = 1000;
-    [HideInInspector] public int currentHealth;
-    [HideInInspector] public bool isDestroyed = false;
-
-    [Header("Optional")]
-    public GameObject deathVFX;
-    public bool destroyOnDeath = false;
-    public UnityEvent onDestroyed;
-
+    [Header("Tower Settings")]
+    public float maxHealth = 2500f;
+    public float currentHealth;
+    
+    [Tooltip("Check this box in the Inspector ONLY for the King Tower")]
     public bool isKingTower = false;
 
-    public HealthBar healthBar;
+    // Added this variable to fix the TroopAttack error!
+    public bool isDestroyed = false;
 
-    private Renderer[] renderers;
-    private Collider[] colliders;
-
-    void Awake()
+    void Start()
     {
-        currentHealth = Mathf.Max(1, maxHealth);
-        renderers = GetComponentsInChildren<Renderer>(true);
-        colliders = GetComponentsInChildren<Collider>(true);
-
-        if (healthBar != null) healthBar.SetMax(currentHealth);
+        // Initialize health when the game starts
+        currentHealth = maxHealth;
+        isDestroyed = false;
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float damageAmount)
     {
+        // If it's already dead, don't take more damage
         if (isDestroyed) return;
-        if (amount <= 0) return;
 
-        currentHealth -= amount;
-        Debug.Log($"{name} took {amount} damage. HP: {currentHealth}/{maxHealth}");
+        currentHealth -= damageAmount;
+        
+        Debug.Log($"{gameObject.name} took {damageAmount} damage! Remaining Health: {currentHealth}");
 
-        if (healthBar != null) healthBar.Set(currentHealth);
-
+        // Check if the tower should be destroyed
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
-            isDestroyed = true;
-            Debug.Log($"{name} took {amount} damage. HP: {currentHealth}/{maxHealth} isDestroyed={isDestroyed}");
             Die();
         }
     }
 
-    public void Heal(int amount)
+    void Die()
     {
-        if (isDestroyed) return;
-        if (amount <= 0) return;
-        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-        if (healthBar != null) healthBar.Set(currentHealth);
-    }
+        // Tell the TroopAttack script that this tower is officially dead!
+        isDestroyed = true;
 
-    private void Die()
-    {
-        foreach (var r in renderers) if (r != null) r.enabled = false;
-        foreach (var c in colliders) if (c != null) c.enabled = false;
-
-        if (deathVFX != null) Instantiate(deathVFX, transform.position, Quaternion.identity);
-        Debug.Log($"{name} destroyed");
-        onDestroyed?.Invoke();
-
-        if (destroyOnDeath) Destroy(gameObject);
-    }
-
-    void OnValidate()
-    {
-        if (maxHealth < 1) maxHealth = 1;
-        if (!Application.isPlaying) currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        if (isKingTower)
+        {
+            Debug.Log("King Tower down! Game Over!");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Princess Tower down!");
+            Destroy(gameObject);
+        }
     }
 }
-
-
-
-
-
-

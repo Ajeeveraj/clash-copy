@@ -100,19 +100,23 @@ public class TroopAttack : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        TowerHealth tower = currentTarget.GetComponent<TowerHealth>();
+        // FIX: Look on the object, its parents, AND its children for TowerHealth
+        TowerHealth tower = currentTarget.GetComponentInParent<TowerHealth>();
+        if (tower == null)
+        {
+            tower = currentTarget.GetComponentInChildren<TowerHealth>();
+        }
+
         if (tower != null)
         {
             tower.TakeDamage(damage); 
-            Debug.Log($"{gameObject.name} attacked Tower for {damage} damage!");
-            return;
+            // This log matches what you see for Princess towers
+            Debug.Log($"{gameObject.name} attacked Tower for {damage} damage!"); 
         }
-
-        TroopHealth troop = currentTarget.GetComponent<TroopHealth>();
-        if (troop != null)
+        else
         {
-            troop.TakeDamage(damage);
-            Debug.Log($"{gameObject.name} attacked opposing Troop for {damage} damage!");
+            // If it STILL fails, it will tell you exactly what object it's hitting
+            Debug.LogWarning($"CRITICAL: {gameObject.name} is hitting {currentTarget.name}, but absolutely no TowerHealth script exists anywhere on its hierarchy!");
         }
     }
 }

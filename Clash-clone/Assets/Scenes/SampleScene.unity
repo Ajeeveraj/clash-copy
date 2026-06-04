@@ -777,6 +777,7 @@ GameObject:
   - component: {fileID: 512035827}
   - component: {fileID: 512035832}
   - component: {fileID: 512035831}
+  - component: {fileID: 512035833}
   m_Layer: 0
   m_Name: KingTower (1)
   m_TagString: EnemyTower
@@ -892,14 +893,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
   maxHealth: 200
   currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 0
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   isKingTower: 1
-  healthBar: {fileID: 0}
+  isDestroyed: 0
 --- !u!114 &512035832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -918,6 +913,22 @@ MonoBehaviour:
   fireRate: 1
   isPlayerTower: 0
   isEnemyTower: 1
+--- !u!208 &512035833
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512035826}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &519508452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,7 +1142,7 @@ Transform:
   m_GameObject: {fileID: 630813711}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.13, y: 0.055, z: 1.51}
+  m_LocalPosition: {x: 10.13, y: 0, z: 1.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1181,7 +1192,8 @@ GameObject:
   - component: {fileID: 761542678}
   - component: {fileID: 761542677}
   - component: {fileID: 761542682}
-  - component: {fileID: 761542681}
+  - component: {fileID: 761542683}
+  - component: {fileID: 761542684}
   m_Layer: 0
   m_Name: KingTower
   m_TagString: PlayerTower
@@ -1208,8 +1220,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 3, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!23 &761542678
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1276,35 +1288,13 @@ Transform:
   m_GameObject: {fileID: 761542676}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.10931, y: 0.11053999, z: -7.22082}
+  m_LocalPosition: {x: 8.10931, y: 0, z: -7.22082}
   m_LocalScale: {x: 2.5, y: 1, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 682072059}
   m_Father: {fileID: 133515211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &761542681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 761542676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 0
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
-  isKingTower: 1
-  healthBar: {fileID: 0}
 --- !u!114 &761542682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1317,12 +1307,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce3ee37136bd0841b224a26243a5b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerAttack
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 8031857180242437414, guid: f432e8b1efa6c634b880f30d7beb4052, type: 3}
+  firePoint: {fileID: 682072059}
   attackRange: 7
   fireRate: 1
   isPlayerTower: 1
   isEnemyTower: 0
+--- !u!208 &761542683
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761542676}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &761542684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761542676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
+  maxHealth: 200
+  currentHealth: 200
+  isKingTower: 1
+  isDestroyed: 0
 --- !u!1 &793782342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1513,6 +1535,7 @@ GameObject:
   - component: {fileID: 878217681}
   - component: {fileID: 878217686}
   - component: {fileID: 878217685}
+  - component: {fileID: 878217687}
   m_Layer: 0
   m_Name: PrincessTowerRight (1)
   m_TagString: PlayerTower
@@ -1542,7 +1565,7 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &878217682
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1630,14 +1653,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
   maxHealth: 200
   currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 1
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   isKingTower: 0
-  healthBar: {fileID: 0}
+  isDestroyed: 0
 --- !u!114 &878217686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1656,6 +1673,22 @@ MonoBehaviour:
   fireRate: 1
   isPlayerTower: 1
   isEnemyTower: 0
+--- !u!208 &878217687
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878217680}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &957347851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,7 +1750,7 @@ Transform:
   m_GameObject: {fileID: 1005977547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.8, y: 0.055, z: 1.64}
+  m_LocalPosition: {x: -11.8, y: 0, z: 1.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2148,6 +2181,7 @@ GameObject:
   - component: {fileID: 1313247787}
   - component: {fileID: 1313247792}
   - component: {fileID: 1313247791}
+  - component: {fileID: 1313247793}
   m_Layer: 0
   m_Name: PrincessTowerRight (2)
   m_TagString: EnemyTower
@@ -2177,7 +2211,7 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1313247788
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2283,14 +2317,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
   maxHealth: 200
   currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 1
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   isKingTower: 0
-  healthBar: {fileID: 0}
+  isDestroyed: 0
+--- !u!208 &1313247793
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313247786}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1433443638
 GameObject:
   m_ObjectHideFlags: 0
@@ -2471,7 +2515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   enemyKingTower: {fileID: 512035831}
-  playerKingTower: {fileID: 761542681}
+  playerKingTower: {fileID: 0}
 --- !u!4 &1456682203
 Transform:
   m_ObjectHideFlags: 0
@@ -2686,6 +2730,7 @@ GameObject:
   - component: {fileID: 1641270884}
   - component: {fileID: 1641270889}
   - component: {fileID: 1641270888}
+  - component: {fileID: 1641270890}
   m_Layer: 0
   m_Name: PrincessTowerLeft (2)
   m_TagString: EnemyTower
@@ -2715,7 +2760,7 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1641270885
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2803,14 +2848,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
   maxHealth: 200
   currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 1
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   isKingTower: 0
-  healthBar: {fileID: 0}
+  isDestroyed: 0
 --- !u!114 &1641270889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2829,6 +2868,22 @@ MonoBehaviour:
   fireRate: 1
   isPlayerTower: 0
   isEnemyTower: 1
+--- !u!208 &1641270890
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641270883}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1648316498
 GameObject:
   m_ObjectHideFlags: 0
@@ -3331,6 +3386,7 @@ GameObject:
   - component: {fileID: 1738321533}
   - component: {fileID: 1738321538}
   - component: {fileID: 1738321537}
+  - component: {fileID: 1738321539}
   m_Layer: 0
   m_Name: PrincessTowerLeft
   m_TagString: PlayerTower
@@ -3360,7 +3416,7 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1738321534
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3448,14 +3504,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
   maxHealth: 200
   currentHealth: 0
-  isDestroyed: 0
-  deathVFX: {fileID: 0}
-  destroyOnDeath: 1
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   isKingTower: 0
-  healthBar: {fileID: 0}
+  isDestroyed: 0
 --- !u!114 &1738321538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3474,6 +3524,22 @@ MonoBehaviour:
   fireRate: 1
   isPlayerTower: 1
   isEnemyTower: 0
+--- !u!208 &1738321539
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738321532}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1744899725
 GameObject:
   m_ObjectHideFlags: 0
@@ -4238,8 +4304,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
   m_SerializedVersion: 0
-  m_OverrideArea: 0
-  m_Area: 0
+  m_OverrideArea: 1
+  m_Area: 1
   m_OverrideGenerateLinks: 0
   m_GenerateLinks: 0
   m_IgnoreFromBuild: 0
