@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -6619827321356549101}
   - component: {fileID: 6424069251167972979}
   - component: {fileID: 5966447449720613910}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Troop
   m_TagString: Troop
   m_Icon: {fileID: 0}
@@ -159,11 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9173db3b3130588429d5eb8d234aceb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  moveSpeed: 2
-  leftTowerTag: EnemyTowerLeft
-  rightTowerTag: EnemyTowerRight
-  mapCenterX: 8
-  targetTower: {fileID: 0}
 --- !u!114 &-6619827321356549101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279250cd133eeec4e937b4decde30d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TroopHealth
-  maxHealth: 500
+  maxHealth: 200
   currentHealth: 0
   isDead: 0
   healthBar: {fileID: 7763943231938179342}
@@ -214,10 +209,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e736392825ea64b43967fd9d24fec1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TroopAttack
-  damage: 40
+  isEnemy: 0
+  currentTarget: {fileID: 0}
   attackRange: 3
   attackCooldown: 1
-  enemyTowerTag: EnemyTower
+  damage: 50
+  detectionRadius: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &3438809403372367417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,6 +229,14 @@ PrefabInstance:
     - target: {fileID: 973000641516162622, guid: 26c05988037184d40b32a206714291ef, type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 973000641516162622, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679787474756656739, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5321466208793168972, guid: 26c05988037184d40b32a206714291ef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -269,6 +277,18 @@ PrefabInstance:
     - target: {fileID: 5321466208793168972, guid: 26c05988037184d40b32a206714291ef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475364991032763223, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708628283062029494, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7710955046795762179, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

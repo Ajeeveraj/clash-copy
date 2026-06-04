@@ -1,120 +1,96 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class TroopAttack : MonoBehaviour
 {
-    [Header("Team Settings")]
-    public bool isEnemy = false; 
+    public bool isEnemy;
+    public Transform currentTarget;
+    public float attackRange = 1.5f;
 
-    [Header("Targeting Settings")]
-    public float attackRange = 2.5f; 
-    private GameObject currentTarget;
+    [Header("Settings")]
+    [SerializeField] private float attackCooldown = 1.0f;
+    [SerializeField] private float detectionRadius = 5.0f;
+    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private int damage = 10;
 
-    [Header("Combat Settings")]
-    public int damage = 10; 
-    public float attackSpeed = 1.5f; 
-    private float attackCooldown;
+    private float nextAttackTime;
+    private string enemyTroopTag;
+    private string enemyTowerTag;
+
+    void Start()
+    {
+        enemyTroopTag = isEnemy ? "Troop" : "EnemyTroop";
+        enemyTowerTag = isEnemy ? "PlayerTower" : "EnemyTower";
+    }
 
     void Update()
     {
-        // FIX: If the target is destroyed, dump the reference instantly!
+        // 1. If target exists, check if it's dead
         if (currentTarget != null)
         {
-            TowerHealth towerHealth = currentTarget.GetComponent<TowerHealth>();
-            if (towerHealth != null && towerHealth.isDestroyed)
-            {
-                currentTarget = null; // Drop dead target
-            }
+            if (IsTargetDead(currentTarget)) currentTarget = null;
         }
 
-        // If we have no target, find a new valid one immediately
+        // 2. If no target, search
         if (currentTarget == null)
         {
-            FindTarget();
+            LookForNearbyEnemies();
+            if (currentTarget == null) FindClosestTower();
         }
-        else
+
+        // 3. Attack if in range
+        if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) <= attackRange)
         {
-            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.transform.position);
-            
-            if (distanceToTarget <= attackRange)
+            if (Time.time >= nextAttackTime)
             {
-                attackCooldown -= Time.deltaTime;
-                if (attackCooldown <= 0f)
-                {
-                    AttackTarget();
-                    attackCooldown = attackSpeed; 
-                }
+                Attack();
+                nextAttackTime = Time.time + attackCooldown;
             }
         }
     }
 
-    void FindTarget()
+    private bool IsTargetDead(Transform t)
     {
-        List<string> targetTags = new List<string>();
-
-        if (isEnemy)
-        {
-            targetTags.Add("Troop");
-            targetTags.Add("PlayerTower"); 
-        }
-        else
-        {
-            targetTags.Add("EnemyTroop");
-            targetTags.Add("EnemyTower"); 
-        }
-
-        List<GameObject> potentialTargets = new List<GameObject>();
-        foreach (string tag in targetTags)
-        {
-            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
-            potentialTargets.AddRange(objectsWithTag);
-        }
-
-        GameObject closestTarget = null;
-        float shortestDistance = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-
-        foreach (GameObject potentialTarget in potentialTargets)
-        {
-            if (potentialTarget != null)
-            {
-                TowerHealth towerHealth = potentialTarget.GetComponent<TowerHealth>();
-                if (towerHealth != null && towerHealth.isDestroyed)
-                {
-                    continue; 
-                }
-
-                float distanceToEnemy = Vector3.Distance(currentPosition, potentialTarget.transform.position);
-                if (distanceToEnemy < shortestDistance)
-                {
-                    shortestDistance = distanceToEnemy;
-                    closestTarget = potentialTarget;
-                }
-            }
-        }
-
-        currentTarget = closestTarget;
+        if (t.TryGetComponent<TroopHealth>(out var th)) return th.isDead;
+        if (t.TryGetComponent<TowerHealth>(out var toh)) return toh.isDestroyed;
+        return false;
     }
 
-    void AttackTarget()
+    private void LookForNearbyEnemies()
     {
-        if (currentTarget == null) return;
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, targetLayer);
+        Transform closest = null;
+        float dist = Mathf.Infinity;
 
-        TowerHealth tower = currentTarget.GetComponent<TowerHealth>();
-        if (tower != null)
+        foreach (var hit in hits)
         {
-            tower.TakeDamage(damage); 
-            Debug.Log($"{gameObject.name} attacked Tower for {damage} damage!");
-            return;
+            if (hit.gameObject.layer == gameObject.layer) continue;
+            if (hit.CompareTag(enemyTroopTag))
+            {
+                float d = Vector3.Distance(transform.position, hit.transform.position);
+                if (d < dist) { dist = d; closest = hit.transform; }
+            }
         }
+        currentTarget = closest;
+    }
 
-        TroopHealth troop = currentTarget.GetComponent<TroopHealth>();
-        if (troop != null)
+    private void FindClosestTower()
+    {
+        GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
+        Transform closest = null;
+        float dist = Mathf.Infinity;
+
+        foreach (var t in towers)
         {
-            troop.TakeDamage(damage);
-            Debug.Log($"{gameObject.name} attacked opposing Troop for {damage} damage!");
+            if (t.TryGetComponent<TowerHealth>(out var th) && th.isDestroyed) continue;
+            float d = Vector3.Distance(transform.position, t.transform.position);
+            if (d < dist) { dist = d; closest = t.transform; }
         }
+        currentTarget = closest;
+    }
+
+    private void Attack()
+    {
+        if (currentTarget.TryGetComponent<TroopHealth>(out var th)) th.TakeDamage(damage);
+        else if (currentTarget.TryGetComponent<TowerHealth>(out var toh)) toh.TakeDamage(damage);
     }
 }
-
-
