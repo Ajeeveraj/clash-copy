@@ -1,79 +1,134 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TroopAttack : MonoBehaviour
 {
     public bool isEnemy;
     public Transform currentTarget;
-    public float attackRange = 1.5f;
-
-    [Header("Settings")]
+    
+    [Header("Combat Settings")]
+    public float attackRange = 1.0f;
     [SerializeField] private float attackCooldown = 1.0f;
-    [SerializeField] private float detectionRadius = 5.0f;
-    [SerializeField] private LayerMask targetLayer;
-    [SerializeField] private int damage = 10;
+    [SerializeField] private int damage = 50;
+    [SerializeField] public float detectionRadius = 8.0f; 
 
     private float nextAttackTime;
     private string enemyTroopTag;
     private string enemyTowerTag;
+    private NavMeshAgent myAgent;
 
     void Start()
     {
         enemyTroopTag = isEnemy ? "Troop" : "EnemyTroop";
         enemyTowerTag = isEnemy ? "PlayerTower" : "EnemyTower";
+        myAgent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
     {
-        // 1. If target exists, check if it's dead
+        // 1. Instantly clear dead targets
+        if (currentTarget != null && IsTargetDead(currentTarget))
+        {
+            Debug.Log(name + " TARGET DIED: " + currentTarget.name);
+            currentTarget = null;
+        }
+
+        // 2. High Priority Re-Targeting
+        bool isCurrentTargetATower =
+            currentTarget != null &&
+            (currentTarget.CompareTag("PlayerTower") ||
+            currentTarget.CompareTag("EnemyTower"));
+
+        if (currentTarget == null || isCurrentTargetATower)
+        {
+            Transform nearbyTroopThreat = LookForNearbyEnemies();
+
+            if (nearbyTroopThreat != null)
+            {
+                currentTarget = nearbyTroopThreat;
+
+                Debug.Log(
+                    name +
+                    " NEW TARGET TROOP: " +
+                    currentTarget.name +
+                    " at " +
+                    currentTarget.position
+                );
+            }
+            else if (currentTarget == null)
+            {
+                currentTarget = FindClosestTower();
+
+                if (currentTarget != null)
+                {
+                    Debug.Log(
+                        name +
+                        " NEW TARGET TOWER: " +
+                        currentTarget.name +
+                        " at " +
+                        currentTarget.position
+                    );
+                }
+            }
+        }
+
+        // 3. Combat Execution using EDGE-TO-EDGE distance
         if (currentTarget != null)
         {
-            if (IsTargetDead(currentTarget)) currentTarget = null;
-        }
+            float distanceToTarget =
+                Vector3.Distance(transform.position,
+                                currentTarget.position);
 
-        // 2. If no target, search
-        if (currentTarget == null)
-        {
-            LookForNearbyEnemies();
-            if (currentTarget == null) FindClosestTower();
-        }
-
-        // 3. Attack if in range
-        if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) <= attackRange)
-        {
-            if (Time.time >= nextAttackTime)
+            if (distanceToTarget <= GetActualAttackRange(currentTarget))
             {
-                Attack();
-                nextAttackTime = Time.time + attackCooldown;
+                if (Time.time >= nextAttackTime)
+                {
+                    Attack();
+                    nextAttackTime = Time.time + attackCooldown;
+                }
             }
         }
     }
+        public float GetActualAttackRange(Transform target)
+        {
+            float actualRange = attackRange;
+            if (myAgent != null) actualRange += myAgent.radius;
 
-    private bool IsTargetDead(Transform t)
-    {
-        if (t.TryGetComponent<TroopHealth>(out var th)) return th.isDead;
-        if (t.TryGetComponent<TowerHealth>(out var toh)) return toh.isDestroyed;
-        return false;
-    }
+            if (target != null)
+            {
+                if (target.TryGetComponent<NavMeshAgent>(out var targetAgent)) actualRange += targetAgent.radius;
+                else if (target.TryGetComponent<NavMeshObstacle>(out var obs)) actualRange += (obs.radius > 0 ? obs.radius : 1.5f);
+                else actualRange += 1.0f;
+            }
+            return actualRange;
+        }
 
-    private void LookForNearbyEnemies()
+        private bool IsTargetDead(Transform t)
+        {
+            if (t == null) return true;
+            if (t.TryGetComponent<TroopHealth>(out var th)) return th.isDead;
+            if (t.TryGetComponent<TowerHealth>(out var toh)) return toh.isDestroyed;
+            return true;
+        }
+
+    private Transform LookForNearbyEnemies()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, targetLayer);
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTroopTag);
         Transform closest = null;
         float dist = Mathf.Infinity;
 
-        foreach (var hit in hits)
+        foreach (var e in enemies)
         {
-            if (hit.gameObject.layer == gameObject.layer) continue;
-            if (hit.CompareTag(enemyTroopTag))
-            {
-                float d = Vector3.Distance(transform.position, hit.transform.position);
-                if (d < dist) { dist = d; closest = hit.transform; }
-            }
+            if (e == null) continue;
+            if (e.TryGetComponent<TroopHealth>(out var th) && th.isDead) continue;
+
+            float d = Vector3.Distance(transform.position, e.transform.position);
+            if (d <= detectionRadius && d < dist) { dist = d; closest = e.transform; }
         }
-        currentTarget = closest;
+        return closest;
     }
 
-    private void FindClosestTower()
+    private Transform FindClosestTower()
     {
         GameObject[] towers = GameObject.FindGameObjectsWithTag(enemyTowerTag);
         Transform closest = null;
@@ -81,15 +136,17 @@ public class TroopAttack : MonoBehaviour
 
         foreach (var t in towers)
         {
+            if (t == null) continue;
             if (t.TryGetComponent<TowerHealth>(out var th) && th.isDestroyed) continue;
             float d = Vector3.Distance(transform.position, t.transform.position);
             if (d < dist) { dist = d; closest = t.transform; }
         }
-        currentTarget = closest;
+        return closest;
     }
 
     private void Attack()
     {
+        if (currentTarget == null) return;
         if (currentTarget.TryGetComponent<TroopHealth>(out var th)) th.TakeDamage(damage);
         else if (currentTarget.TryGetComponent<TowerHealth>(out var toh)) toh.TakeDamage(damage);
     }
