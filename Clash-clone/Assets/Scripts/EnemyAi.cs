@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI; // MUST HAVE THIS FOR NAVMESH UTILITIES
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,15 +8,15 @@ public class EnemyAI : MonoBehaviour
     [Header("Resource Settings")]
     public float currentElixir = 0f;
     public float maxElixir = 10f;
-    public float elixirRegenRate = 1f; // 1 elixir per second (adjust to match player)
+    public float elixirRegenRate = 1f; 
 
     [Header("Spawn Points")]
     public Transform leftLaneSpawn;
     public Transform rightLaneSpawn;
 
     [Header("AI Deck (Troop Prefabs)")]
-    public List<GameObject> troopPrefabs; // Drop your 4 enemy troop prefabs here
-    public List<int> troopCosts;          // Match the costs to the prefabs array order
+    public List<GameObject> troopPrefabs; 
+    public List<int> troopCosts;          
 
     [Header("AI Logic Timer")]
     private float decisionTimer = 3f;
@@ -23,66 +24,79 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        // 1. Regenerate Elixir
         if (currentElixir < maxElixir)
         {
             currentElixir += elixirRegenRate * Time.deltaTime;
         }
 
-        // 2. Cooldown timer for making decisions (stops AI from spamming instantly)
         currentTimer += Time.deltaTime;
         if (currentTimer >= decisionTimer)
         {
             MakeAIDecision();
-            currentTimer = 0f; // Reset decision window
+            currentTimer = 0f; 
         }
     }
 
     void MakeAIDecision()
     {
-        // Don't do anything if we are completely broke
         if (currentElixir < 2) return; 
 
-        // Pick a random troop from the deck
         int randomTroopIndex = Random.Range(0, troopPrefabs.Count);
         int cost = troopCosts[randomTroopIndex];
 
-        // Check if the AI can afford it
         if (currentElixir >= cost)
         {
             Transform chosenSpawnPoint = DetermineBestLane();
             
-            // Spawn the troop!
-            Instantiate(troopPrefabs[randomTroopIndex], chosenSpawnPoint.position, Quaternion.identity);
+            // --- THE DEFINITIVE FIX ---
+            // Find the absolute closest valid point on the baked NavMesh within 3 units of your spawn point object
+            NavMeshHit hit;
+            Vector3 finalSpawnPosition = chosenSpawnPoint.position;
+
+            if (NavMesh.SamplePosition(chosenSpawnPoint.position, out hit, 3.0f, NavMesh.AllAreas))
+            {
+                // Snap the position coordinates exactly onto the blue mesh surface
+                finalSpawnPosition = hit.position;
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Spawn Point '{chosenSpawnPoint.name}' is too far away from the baked NavMesh floor!");
+            }
+
+            // Spawn the troop exactly on the clean grid line so its anchor point never bugs out
+            GameObject spawnedTroop = Instantiate(troopPrefabs[randomTroopIndex], finalSpawnPosition, Quaternion.identity);
+            
+            // Force the agent to realize it is perfectly on the mesh right out of the gate
+            NavMeshAgent agent = spawnedTroop.GetComponent<NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.enabled = false;
+                spawnedTroop.transform.position = finalSpawnPosition;
+                agent.enabled = true;
+            }
+
             currentElixir -= cost;
         }
     }
 
     Transform DetermineBestLane()
     {
-        // Find all player troops currently on the battlefield
-        // (Make sure your player troop prefabs are tagged as "PlayerTroop"!)
         GameObject[] playerTroops = GameObject.FindGameObjectsWithTag("Troop");
 
         if (playerTroops.Length > 0)
         {
-            // React to the first player troop found
             GameObject targetTroop = playerTroops[0];
 
-            // If its X position is less than 0, it's on the left side
             if (targetTroop.transform.position.x < 0)
             {
-                Debug.Log("AI detecting attack on LEFT lane.");
                 return leftLaneSpawn;
             }
             else
             {
-                Debug.Log("AI detecting attack on RIGHT lane.");
                 return rightLaneSpawn;
             }
         }
 
-        // If no player troops exist, pick a completely random lane
         int randomLane = Random.Range(0, 2);
         return randomLane == 0 ? leftLaneSpawn : rightLaneSpawn;
     }
