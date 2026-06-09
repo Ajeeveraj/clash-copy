@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.AI; // MUST HAVE THIS FOR NAVMESH UTILITIES
+using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,48 +14,77 @@ public class EnemyAI : MonoBehaviour
     public Transform leftLaneSpawn;
     public Transform rightLaneSpawn;
 
-    [Header("AI Deck (Troop Prefabs)")]
+    [Header("AI Deck (0 = Troop, 1 = Giant)")]
     public List<GameObject> troopPrefabs; 
     public List<int> troopCosts;          
 
-    [Header("AI Logic Timer")]
-    private float decisionTimer = 3f;
-    private float currentTimer = 0f;
+    [Header("Randomized Timers")]
+    public float minTroopTime = 4f;
+    public float maxTroopTime = 7f;
+    private float troopTimer;
+
+    public float minGiantTime = 15f;
+    public float maxGiantTime = 25f;
+    private float giantTimer;
+
+    void Start()
+    {
+        // Start the game by picking a random time for both units
+        troopTimer = Random.Range(minTroopTime, maxTroopTime);
+        giantTimer = Random.Range(minGiantTime, maxGiantTime);
+    }
 
     void Update()
     {
+        // Elixir Regen
         if (currentElixir < maxElixir)
         {
             currentElixir += elixirRegenRate * Time.deltaTime;
         }
 
-        currentTimer += Time.deltaTime;
-        if (currentTimer >= decisionTimer)
+        // Count down both timers
+        troopTimer -= Time.deltaTime;
+        giantTimer -= Time.deltaTime;
+
+        // Check the Giant timer first (Assuming Giant is Index 1 in your lists)
+        if (giantTimer <= 0f)
         {
-            MakeAIDecision();
-            currentTimer = 0f; 
+            // If it successfully spawns (has enough elixir), reset the timer with a new random number
+            if (AttemptSpawn(1)) 
+            {
+                giantTimer = Random.Range(minGiantTime, maxGiantTime);
+            }
+        }
+
+        // Check the Troop timer (Assuming normal Troop is Index 0 in your lists)
+        if (troopTimer <= 0f)
+        {
+            if (AttemptSpawn(0)) 
+            {
+                troopTimer = Random.Range(minTroopTime, maxTroopTime);
+            }
         }
     }
 
-    void MakeAIDecision()
+    // Changed MakeAIDecision to AttemptSpawn so we can tell it exactly WHICH troop to spawn
+    bool AttemptSpawn(int listIndex)
     {
-        if (currentElixir < 2) return; 
+        // Failsafe: Make sure you actually added the troops to the list in the Inspector!
+        if (listIndex >= troopPrefabs.Count) return false;
 
-        int randomTroopIndex = Random.Range(0, troopPrefabs.Count);
-        int cost = troopCosts[randomTroopIndex];
+        int cost = troopCosts[listIndex];
 
+        // Only spawn if the AI has saved up enough Elixir
         if (currentElixir >= cost)
         {
             Transform chosenSpawnPoint = DetermineBestLane();
             
             // --- THE DEFINITIVE FIX ---
-            // Find the absolute closest valid point on the baked NavMesh within 3 units of your spawn point object
             NavMeshHit hit;
             Vector3 finalSpawnPosition = chosenSpawnPoint.position;
 
             if (NavMesh.SamplePosition(chosenSpawnPoint.position, out hit, 3.0f, NavMesh.AllAreas))
             {
-                // Snap the position coordinates exactly onto the blue mesh surface
                 finalSpawnPosition = hit.position;
             }
             else
@@ -63,10 +92,8 @@ public class EnemyAI : MonoBehaviour
                 Debug.LogWarning($"⚠️ Spawn Point '{chosenSpawnPoint.name}' is too far away from the baked NavMesh floor!");
             }
 
-            // Spawn the troop exactly on the clean grid line so its anchor point never bugs out
-            GameObject spawnedTroop = Instantiate(troopPrefabs[randomTroopIndex], finalSpawnPosition, Quaternion.identity);
+            GameObject spawnedTroop = Instantiate(troopPrefabs[listIndex], finalSpawnPosition, Quaternion.identity);
             
-            // Force the agent to realize it is perfectly on the mesh right out of the gate
             NavMeshAgent agent = spawnedTroop.GetComponent<NavMeshAgent>();
             if (agent != null)
             {
@@ -75,8 +102,13 @@ public class EnemyAI : MonoBehaviour
                 agent.enabled = true;
             }
 
+            // Deduct the elixir cost and tell Update() the spawn was a success
             currentElixir -= cost;
+            return true; 
         }
+
+        // Not enough elixir, return false so the timer stays at 0 and tries again next frame
+        return false; 
     }
 
     Transform DetermineBestLane()
