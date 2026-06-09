@@ -23,53 +23,38 @@ public class TroopMovement : MonoBehaviour
 
     void Update()
     {
-        if (!agent.enabled || !agent.isOnNavMesh)
-            return;
+        // If the agent is off the NavMesh, don't try to move
+        if (!agent.enabled || !agent.isOnNavMesh) return;
 
-        // Debug target switching
+        // IF WE HAVE NO TARGET, STOP
         if (attack.currentTarget == null)
         {
             StopMovingFully();
             return;
         }
 
-        float distanceToTarget =
-            Vector3.Distance(transform.position,
-                             attack.currentTarget.position);
-
-        // IMPORTANT:
-        // Use the SAME range calculation as TroopAttack
-        float combatRange =
-            attack.GetActualAttackRange(attack.currentTarget);
+        // TARGETING LOGIC
+        float distanceToTarget = Vector3.Distance(transform.position, attack.currentTarget.position);
+        float combatRange = attack.GetActualAttackRange(attack.currentTarget);
 
         if (distanceToTarget <= combatRange)
         {
             StopMovingFully();
-
-            Vector3 lookDir =
-                attack.currentTarget.position - transform.position;
-
+            // Handle rotation only
+            Vector3 lookDir = attack.currentTarget.position - transform.position;
             lookDir.y = 0;
-
             if (lookDir.sqrMagnitude > 0.01f)
-            {
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    Quaternion.LookRotation(lookDir.normalized),
-                    Time.deltaTime * 12f
-                );
-            }
-
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir.normalized), Time.deltaTime * 12f);
             return;
         }
 
+        // CHASE LOGIC
         ChaseTarget(attack.currentTarget.position);
     }
 
     private void ChaseTarget(Vector3 targetPosition)
     {
         agent.isStopped = false;
-
         pathUpdateTimer -= Time.deltaTime;
 
         if (pathUpdateTimer <= 0f)
@@ -78,6 +63,11 @@ public class TroopMovement : MonoBehaviour
             agent.SetDestination(targetPosition);
         }
 
+        HandleRotation();
+    }
+
+    private void HandleRotation()
+    {
         if (agent.velocity.sqrMagnitude > 0.1f)
         {
             Vector3 moveDir = agent.velocity.normalized;

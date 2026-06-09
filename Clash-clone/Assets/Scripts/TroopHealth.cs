@@ -40,12 +40,22 @@ public class TroopHealth : MonoBehaviour
         }
     }
 
-    private void Die()
+    void Die()
     {
-        foreach (var r in renderers) if (r != null) r.enabled = false;
-        foreach (var c in colliders) if (c != null) c.enabled = false;
-        Debug.Log($"[TroopHealth] {name} died and is being destroyed.");
-        Destroy(gameObject, 0.1f);
+        isDead = true;
+
+        // Turn off navigation immediately so it stops blocking the link
+        UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (agent != null) agent.enabled = false;
+
+        // Turn off the collider so new troops can walk right through the space
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // Trigger your death animation here if you have one
+        
+        // Completely remove the object
+        Destroy(gameObject); 
     }
 
     void OnValidate()

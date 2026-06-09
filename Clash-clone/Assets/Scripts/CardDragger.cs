@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
+using UnityEngine.AI;
 
 public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
 {
@@ -9,7 +10,6 @@ public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
     public GameObject troopPrefab; 
 
     [Header("Placement Rules")]
-    // Adjust this number to match where your river or centerline sits!
     public float maxDeploymentZ = 0f; 
 
     private Vector3 originalPosition;
@@ -20,7 +20,6 @@ public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         originalPosition = transform.position;
         cardManager = FindFirstObjectByType<CardManager>();
-        
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
@@ -31,6 +30,7 @@ public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
         canvasGroup.blocksRaycasts = false; 
     }
 
+
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true; 
@@ -39,21 +39,44 @@ public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        // 1. Raycast hits EVERYTHING (no layer mask)
+        if (Physics.Raycast(ray, out hit, 100f))
         {
-            // NEW RULE: Check if the drop location's Z coordinate is on your half!
-            if (hit.point.z <= maxDeploymentZ)
+            int groundLayerIndex = LayerMask.NameToLayer("ground");
+
+            // 2. We check if the FIRST thing we hit was the ground
+            if (hit.collider.gameObject.layer == groundLayerIndex)
             {
-                // Try to spend elixir and spawn
-                if (cardManager != null && cardManager.SpendElixir(elixirCost))
+                if (hit.point.z <= maxDeploymentZ)
                 {
-                    Instantiate(troopPrefab, hit.point, Quaternion.identity);
+                    if (cardManager != null && cardManager.SpendElixir(elixirCost))
+                    {
+                        Vector3 spawnPos = hit.point;
+                        NavMeshHit navHit;
+                        
+                        // Small search radius so they don't teleport across the map
+                        if (NavMesh.SamplePosition(hit.point, out navHit, 2.0f, NavMesh.AllAreas))
+                        {
+                            spawnPos = navHit.position;
+                        }
+
+                        Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Placement rejected: Enemy side!");
                 }
             }
             else
             {
-                Debug.Log("Cannot deploy on the enemy's side of the field!");
+                // 3. If you hit the new River BoxCollider, it triggers this and stops!
+                Debug.Log("Placement rejected: You hit " + hit.collider.gameObject.name + " which is not ground.");
             }
+        }
+        else
+        {
+            Debug.Log("Placement rejected: Hit nothing.");
         }
 
         transform.position = originalPosition;

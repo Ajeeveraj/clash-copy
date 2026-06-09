@@ -29,45 +29,45 @@ public class TroopAttack : MonoBehaviour
         // 1. Instantly clear dead targets
         if (currentTarget != null && IsTargetDead(currentTarget))
         {
-            Debug.Log(name + " TARGET DIED: " + currentTarget.name);
             currentTarget = null;
         }
 
-        // 2. High Priority Re-Targeting
-        bool isCurrentTargetATower =
-            currentTarget != null &&
-            (currentTarget.CompareTag("PlayerTower") ||
-            currentTarget.CompareTag("EnemyTower"));
-
-        if (currentTarget == null || isCurrentTargetATower)
+        // 2. Target Selection & Stickiness (THE FIX)
+        if (currentTarget == null)
         {
-            Transform nearbyTroopThreat = LookForNearbyEnemies();
+            // Priority 1: Look for nearby troops first
+            currentTarget = LookForNearbyEnemies();
 
-            if (nearbyTroopThreat != null)
-            {
-                currentTarget = nearbyTroopThreat;
-
-                Debug.Log(
-                    name +
-                    " NEW TARGET TROOP: " +
-                    currentTarget.name +
-                    " at " +
-                    currentTarget.position
-                );
-            }
-            else if (currentTarget == null)
+            // Priority 2: If no troops around, walk to the closest tower
+            if (currentTarget == null)
             {
                 currentTarget = FindClosestTower();
+            }
+        }
+        else // WE HAVE A TARGET
+        {
+            bool isCurrentTargetATower = currentTarget.CompareTag("PlayerTower") || currentTarget.CompareTag("EnemyTower");
+            
+            // If we are walking towards a tower, we can get distracted by closer troops.
+            // But if we are already in attack range, we LOCK ON and ignore distractions.
+            if (isCurrentTargetATower)
+            {
+                float distToTower = Vector3.Distance(transform.position, currentTarget.position);
+                bool activelyAttacking = distToTower <= GetActualAttackRange(currentTarget);
 
-                if (currentTarget != null)
+                if (!activelyAttacking)
                 {
-                    Debug.Log(
-                        name +
-                        " NEW TARGET TOWER: " +
-                        currentTarget.name +
-                        " at " +
-                        currentTarget.position
-                    );
+                    Transform nearbyTroop = LookForNearbyEnemies();
+                    if (nearbyTroop != null)
+                    {
+                        float distToTroop = Vector3.Distance(transform.position, nearbyTroop.position);
+                        
+                        // ONLY get distracted if the new troop is CLOSER than the tower
+                        if (distToTroop < distToTower)
+                        {
+                            currentTarget = nearbyTroop;
+                        }
+                    }
                 }
             }
         }
@@ -75,9 +75,7 @@ public class TroopAttack : MonoBehaviour
         // 3. Combat Execution using EDGE-TO-EDGE distance
         if (currentTarget != null)
         {
-            float distanceToTarget =
-                Vector3.Distance(transform.position,
-                                currentTarget.position);
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
 
             if (distanceToTarget <= GetActualAttackRange(currentTarget))
             {
@@ -89,27 +87,28 @@ public class TroopAttack : MonoBehaviour
             }
         }
     }
-        public float GetActualAttackRange(Transform target)
-        {
-            float actualRange = attackRange;
-            if (myAgent != null) actualRange += myAgent.radius;
 
-            if (target != null)
-            {
-                if (target.TryGetComponent<NavMeshAgent>(out var targetAgent)) actualRange += targetAgent.radius;
-                else if (target.TryGetComponent<NavMeshObstacle>(out var obs)) actualRange += (obs.radius > 0 ? obs.radius : 1.5f);
-                else actualRange += 1.0f;
-            }
-            return actualRange;
-        }
+    public float GetActualAttackRange(Transform target)
+    {
+        float actualRange = attackRange;
+        if (myAgent != null) actualRange += myAgent.radius;
 
-        private bool IsTargetDead(Transform t)
+        if (target != null)
         {
-            if (t == null) return true;
-            if (t.TryGetComponent<TroopHealth>(out var th)) return th.isDead;
-            if (t.TryGetComponent<TowerHealth>(out var toh)) return toh.isDestroyed;
-            return true;
+            if (target.TryGetComponent<NavMeshAgent>(out var targetAgent)) actualRange += targetAgent.radius;
+            else if (target.TryGetComponent<NavMeshObstacle>(out var obs)) actualRange += (obs.radius > 0 ? obs.radius : 1.5f);
+            else actualRange += 1.0f;
         }
+        return actualRange;
+    }
+
+    private bool IsTargetDead(Transform t)
+    {
+        if (t == null) return true;
+        if (t.TryGetComponent<TroopHealth>(out var th)) return th.isDead;
+        if (t.TryGetComponent<TowerHealth>(out var toh)) return toh.isDestroyed;
+        return true;
+    }
 
     private Transform LookForNearbyEnemies()
     {
