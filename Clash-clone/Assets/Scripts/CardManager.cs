@@ -13,7 +13,7 @@ public class CardManager : MonoBehaviour
     public float startingElixir = 5f;
     public float elixirRegenSpeed = 1f;
 
-    private float currentElixir;
+    public float currentElixir;
 
     void Start()
     {

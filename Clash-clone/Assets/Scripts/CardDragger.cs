@@ -1,84 +1,88 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
 
-public class CardDragger : MonoBehaviour, IDragHandler, IEndDragHandler
+public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("Card Settings")]
     public float elixirCost = 3f;
-    public GameObject troopPrefab; 
+    public GameObject troopPrefab;
 
-    [Header("Placement Rules")]
-    public float maxDeploymentZ = 0f; 
+    [Header("Deployment Zone")]
+    public float minDeploymentZ = -20f;
+    public float maxDeploymentZ = 2f;
 
     private Vector3 originalPosition;
     private CanvasGroup canvasGroup;
     private CardManager cardManager;
 
+    void Awake()
+    {
+        // This forces the limit to 2 immediately when the game starts,
+        // ignoring any old "4" saved in the Inspector.
+        maxDeploymentZ = 2f;
+    }
+
     void Start()
     {
         originalPosition = transform.position;
-        cardManager = FindFirstObjectByType<CardManager>();
+        cardManager = Object.FindFirstObjectByType<CardManager>();
+        
         canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        if (canvasGroup == null) 
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position;
-        canvasGroup.blocksRaycasts = false; 
     }
-
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true; 
-
-        Vector2 mousePos = Pointer.current != null ? Pointer.current.position.ReadValue() : eventData.position;
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-
-        // 1. Raycast hits EVERYTHING (no layer mask)
-        if (Physics.Raycast(ray, out hit, 100f))
-        {
-            int groundLayerIndex = LayerMask.NameToLayer("ground");
-
-            // 2. We check if the FIRST thing we hit was the ground
-            if (hit.collider.gameObject.layer == groundLayerIndex)
-            {
-                if (hit.point.z <= maxDeploymentZ)
-                {
-                    if (cardManager != null && cardManager.SpendElixir(elixirCost))
-                    {
-                        Vector3 spawnPos = hit.point;
-                        NavMeshHit navHit;
-                        
-                        // Small search radius so they don't teleport across the map
-                        if (NavMesh.SamplePosition(hit.point, out navHit, 2.0f, NavMesh.AllAreas))
-                        {
-                            spawnPos = navHit.position;
-                        }
-
-                        Instantiate(troopPrefab, spawnPos, Quaternion.identity);
-                    }
-                }
-                else
-                {
-                    Debug.Log("Placement rejected: Enemy side!");
-                }
-            }
-            else
-            {
-                // 3. If you hit the new River BoxCollider, it triggers this and stops!
-                Debug.Log("Placement rejected: You hit " + hit.collider.gameObject.name + " which is not ground.");
-            }
-        }
-        else
-        {
-            Debug.Log("Placement rejected: Hit nothing.");
-        }
-
+        canvasGroup.blocksRaycasts = true;
         transform.position = originalPosition;
+
+        if (Pointer.current == null) return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Pointer.current.position.ReadValue());
+        int groundLayer = LayerMask.GetMask("ground"); 
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer))
+        {
+            // Check for River OR PlayerTower OR EnemyTower
+            if (hit.collider.CompareTag("River") || 
+                hit.collider.CompareTag("PlayerTower") || 
+                hit.collider.CompareTag("EnemyTower"))
+            {
+                Debug.Log($"Rejected: You hit a {hit.collider.tag}. Cannot place here.");
+                return;
+            }
+
+            Vector3 spawnPos = hit.point;
+            
+            // Snap to NavMesh
+            if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 0.5f, NavMesh.AllAreas))
+            {
+                spawnPos = navHit.position;
+            }
+
+            if (spawnPos.z <= 2f)
+            {
+                if (cardManager != null && cardManager.SpendElixir(elixirCost))
+                {
+                    Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                }
+            }
+        }
     }
 }
