@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6424069251167972979}
   - component: {fileID: 5966447449720613910}
   m_Layer: 7
-  m_Name: Troop
+  m_Name: Knight
   m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279250cd133eeec4e937b4decde30d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TroopHealth
-  maxHealth: 200
+  maxHealth: 700
   currentHealth: 0
   isDead: 0
   healthBar: {fileID: 7763943231938179342}
@@ -185,7 +185,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 2
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 40
   m_AngularSpeed: 120
@@ -213,7 +213,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   attackRange: 2
   attackCooldown: 1
-  damage: 50
+  damage: 60
   detectionRadius: 8
 --- !u!1001 &3438809403372367417
 PrefabInstance:

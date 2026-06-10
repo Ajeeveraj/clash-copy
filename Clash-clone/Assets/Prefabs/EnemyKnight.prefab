@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6424069251167972979}
   - component: {fileID: 5966447449720613910}
   m_Layer: 6
-  m_Name: EnemyTroop
+  m_Name: EnemyKnight
   m_TagString: EnemyTroop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

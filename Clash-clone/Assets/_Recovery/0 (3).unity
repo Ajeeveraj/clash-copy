@@ -912,8 +912,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 2000
-  currentHealth: 2000
+  maxHealth: 200
+  currentHealth: 200
   isKingTower: 1
   isDestroyed: 0
 --- !u!114 &512035832
@@ -1058,7 +1058,7 @@ Transform:
   m_GameObject: {fileID: 519508452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.2, y: 0.1, z: -1.19}
+  m_LocalPosition: {x: -20.2, y: 0.1, z: -0.1}
   m_LocalScale: {x: 0.4990005, y: 1, z: 3.6541073}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1190,99 +1190,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &643044165
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 643044166}
-  - component: {fileID: 643044169}
-  - component: {fileID: 643044168}
-  - component: {fileID: 643044167}
-  m_Layer: 5
-  m_Name: Card_Archer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &643044166
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643044165}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1036334932}
-  m_Father: {fileID: 1928226968}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 110}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &643044167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643044165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0def8b3247bcc54084da17530e41ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardDragger
-  elixirCost: 3
-  troopPrefab: {fileID: 3971138963526679291, guid: e76d294ea1e287b4b8f181395de28b4b, type: 3}
-  minDeploymentZ: -20
-  maxDeploymentZ: 2
---- !u!114 &643044168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643044165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &643044169
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643044165}
-  m_CullTransparentMesh: 1
 --- !u!1 &682072058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,8 +1383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 2000
-  currentHealth: 2000
+  maxHealth: 200
+  currentHealth: 200
   isKingTower: 1
   isDestroyed: 0
 --- !u!1 &793782342
@@ -1554,81 +1461,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 793782342}
-  m_CullTransparentMesh: 1
---- !u!1 &825605299
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 825605300}
-  - component: {fileID: 825605302}
-  - component: {fileID: 825605301}
-  m_Layer: 5
-  m_Name: TroopImage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &825605300
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825605299}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1048105977}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 7.5}
-  m_SizeDelta: {x: -10, y: -25}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &825605301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825605299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.4117647, g: 0.4117647, b: 0.4117647, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &825605302
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825605299}
   m_CullTransparentMesh: 1
 --- !u!1 &832575517
 GameObject:
@@ -1708,17 +1540,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 366533645640eb04f9d1fab6b0f27421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  spawnPoints:
-  - {fileID: 1005977548}
-  - {fileID: 630813712}
-  giantPrefab: {fileID: 3310940399868537928, guid: 749b0965741b8d1489a18a7c0ed98b29, type: 3}
-  troopPrefab: {fileID: 1653685239389759972, guid: fa05a5cafc18a9543987199794dd0f79, type: 3}
-  archerPrefab: {fileID: 4231284444222409777, guid: 4229d1e331b3d164a829a2e2e05ede77, type: 3}
-  minipekkaPrefab: {fileID: 7788454710120711776, guid: a373a66c211a7c34cbd92fd6e84b24b5, type: 3}
-  currentElixir: 5
+  currentElixir: 0
   maxElixir: 10
-  elixirRegenSpeed: 0.35
-  decisionInterval: 2
+  elixirRegenRate: 1
+  leftLaneSpawn: {fileID: 1005977548}
+  rightLaneSpawn: {fileID: 630813712}
+  troopPrefabs:
+  - {fileID: 1653685239389759972, guid: fa05a5cafc18a9543987199794dd0f79, type: 3}
+  troopCosts: 03000000
+  minTroopTime: 4
+  maxTroopTime: 7
+  minGiantTime: 15
+  maxGiantTime: 25
 --- !u!4 &868757929
 Transform:
   m_ObjectHideFlags: 0
@@ -1864,8 +1697,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 200
+  currentHealth: 0
   isKingTower: 0
   isDestroyed: 0
 --- !u!114 &878217686
@@ -1969,174 +1802,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1036334931
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1036334932}
-  - component: {fileID: 1036334934}
-  - component: {fileID: 1036334933}
-  m_Layer: 5
-  m_Name: TroopImage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1036334932
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036334931}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 643044166}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 7.5}
-  m_SizeDelta: {x: -10, y: -25}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1036334933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036334931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.4117647, g: 0.4117647, b: 0.4117647, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1036334934
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036334931}
-  m_CullTransparentMesh: 1
---- !u!1 &1048105976
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1048105977}
-  - component: {fileID: 1048105980}
-  - component: {fileID: 1048105979}
-  - component: {fileID: 1048105978}
-  m_Layer: 5
-  m_Name: Card_MiniPekka
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1048105977
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048105976}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 825605300}
-  m_Father: {fileID: 1928226968}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 110}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1048105978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048105976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0def8b3247bcc54084da17530e41ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardDragger
-  elixirCost: 4
-  troopPrefab: {fileID: 7832644713721983595, guid: 7596a9517f8076348aba4cabc939b393, type: 3}
-  minDeploymentZ: -20
-  maxDeploymentZ: 2
---- !u!114 &1048105979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048105976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1048105980
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048105976}
-  m_CullTransparentMesh: 1
 --- !u!1 &1083844856
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,7 +2015,7 @@ GameObject:
   - component: {fileID: 1138298204}
   - component: {fileID: 1138298206}
   m_Layer: 5
-  m_Name: Card_Knight
+  m_Name: Card_Troop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2790,8 +2455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 200
+  currentHealth: 0
   isKingTower: 0
   isDestroyed: 0
 --- !u!208 &1313247793
@@ -3321,8 +2986,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 200
+  currentHealth: 0
   isKingTower: 0
   isDestroyed: 0
 --- !u!114 &1641270889
@@ -3727,6 +3392,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692891832}
   m_CullTransparentMesh: 1
+--- !u!1 &1695303991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1695303992}
+  - component: {fileID: 1695303994}
+  - component: {fileID: 1695303993}
+  m_Layer: 5
+  m_Name: Card_Troop (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1695303992
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695303991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1928226968}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 110}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1695303993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695303991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1695303994
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695303991}
+  m_CullTransparentMesh: 1
 --- !u!1 &1738321532
 GameObject:
   m_ObjectHideFlags: 0
@@ -3857,8 +3597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baf3459ad2ac4143bc0eaeae8db7d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerHealth
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 200
+  currentHealth: 0
   isKingTower: 0
   isDestroyed: 0
 --- !u!114 &1738321538
@@ -3928,7 +3668,7 @@ MonoBehaviour:
   elixirText: {fileID: 1281810909}
   maxElixir: 10
   startingElixir: 5
-  elixirRegenSpeed: 0.35
+  elixirRegenSpeed: 1
   currentElixir: 0
 --- !u!4 &1744899727
 Transform:
@@ -4377,8 +4117,8 @@ RectTransform:
   m_Children:
   - {fileID: 1138298203}
   - {fileID: 1083844857}
-  - {fileID: 643044166}
-  - {fileID: 1048105977}
+  - {fileID: 1695303992}
+  - {fileID: 2122994258}
   m_Father: {fileID: 2143786798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -4726,6 +4466,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 512035830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2122994257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2122994258}
+  - component: {fileID: 2122994260}
+  - component: {fileID: 2122994259}
+  m_Layer: 5
+  m_Name: Card_Troop (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2122994258
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122994257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1928226968}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 110}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2122994259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122994257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2122994260
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122994257}
+  m_CullTransparentMesh: 1
 --- !u!1 &2143786794
 GameObject:
   m_ObjectHideFlags: 0

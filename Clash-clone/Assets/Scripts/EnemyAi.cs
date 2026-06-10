@@ -1,135 +1,85 @@
 using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
-using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour
 {
-    [Header("Resource Settings")]
-    public float currentElixir = 0f;
+    [Header("Lane Spawn Points")]
+    public Transform[] spawnPoints; 
+
+    [Header("Unit Prefabs")]
+    public GameObject giantPrefab;
+    public GameObject troopPrefab;
+    public GameObject archerPrefab;
+    public GameObject minipekkaPrefab; 
+
+    [Header("Elixir Settings")]
+    public float currentElixir = 5f;
     public float maxElixir = 10f;
-    public float elixirRegenRate = 1f; 
+    public float elixirRegenSpeed = 0.35f; 
 
-    [Header("Spawn Points")]
-    public Transform leftLaneSpawn;
-    public Transform rightLaneSpawn;
+    private int giantCost = 5;
+    private int troopCost = 3;
+    private int archerCost = 3;
+    private int minipekkaCost = 4; 
 
-    [Header("AI Deck (0 = Troop, 1 = Giant)")]
-    public List<GameObject> troopPrefabs; 
-    public List<int> troopCosts;          
-
-    [Header("Randomized Timers")]
-    public float minTroopTime = 4f;
-    public float maxTroopTime = 7f;
-    private float troopTimer;
-
-    public float minGiantTime = 15f;
-    public float maxGiantTime = 25f;
-    private float giantTimer;
-
-    void Start()
-    {
-        // Start the game by picking a random time for both units
-        troopTimer = Random.Range(minTroopTime, maxTroopTime);
-        giantTimer = Random.Range(minGiantTime, maxGiantTime);
-    }
+    [Header("Timer Settings")]
+    private float decisionTimer = 0f;
+    public float decisionInterval = 2.5f; 
 
     void Update()
     {
-        // Elixir Regen
+        // 1. Regenerate Elixir automatically over time
         if (currentElixir < maxElixir)
         {
-            currentElixir += elixirRegenRate * Time.deltaTime;
+            currentElixir += elixirRegenSpeed * Time.deltaTime;
         }
 
-        // Count down both timers
-        troopTimer -= Time.deltaTime;
-        giantTimer -= Time.deltaTime;
-
-        // Check the Giant timer first (Assuming Giant is Index 1 in your lists)
-        if (giantTimer <= 0f)
+        // 2. The Spawning Timer
+        decisionTimer += Time.deltaTime;
+        if (decisionTimer >= decisionInterval)
         {
-            // If it successfully spawns (has enough elixir), reset the timer with a new random number
-            if (AttemptSpawn(1)) 
-            {
-                giantTimer = Random.Range(minGiantTime, maxGiantTime);
-            }
-        }
-
-        // Check the Troop timer (Assuming normal Troop is Index 0 in your lists)
-        if (troopTimer <= 0f)
-        {
-            if (AttemptSpawn(0)) 
-            {
-                troopTimer = Random.Range(minTroopTime, maxTroopTime);
-            }
+            EnemyDecisionLogic();
+            decisionTimer = 0f; 
         }
     }
 
-    // Changed MakeAIDecision to AttemptSpawn so we can tell it exactly WHICH troop to spawn
-    bool AttemptSpawn(int listIndex)
+    void EnemyDecisionLogic()
     {
-        // Failsafe: Make sure you actually added the troops to the list in the Inspector!
-        if (listIndex >= troopPrefabs.Count) return false;
+        if (spawnPoints.Length == 0) return;
 
-        int cost = troopCosts[listIndex];
+        // Pick a random unit archetype: 0 = Giant, 1 = Troop, 2 = Archer, 3 = Mini P.E.K.K.A
+        int randomUnit = Random.Range(0, 4); 
 
-        // Only spawn if the AI has saved up enough Elixir
-        if (currentElixir >= cost)
+        // Check if we have enough Elixir to afford the chosen card
+        if (randomUnit == 0 && currentElixir >= giantCost)
         {
-            Transform chosenSpawnPoint = DetermineBestLane();
-            
-            // --- THE DEFINITIVE FIX ---
-            NavMeshHit hit;
-            Vector3 finalSpawnPosition = chosenSpawnPoint.position;
-
-            if (NavMesh.SamplePosition(chosenSpawnPoint.position, out hit, 3.0f, NavMesh.AllAreas))
-            {
-                finalSpawnPosition = hit.position;
-            }
-            else
-            {
-                Debug.LogWarning($"⚠️ Spawn Point '{chosenSpawnPoint.name}' is too far away from the baked NavMesh floor!");
-            }
-
-            GameObject spawnedTroop = Instantiate(troopPrefabs[listIndex], finalSpawnPosition, Quaternion.identity);
-            
-            NavMeshAgent agent = spawnedTroop.GetComponent<NavMeshAgent>();
-            if (agent != null)
-            {
-                agent.enabled = false;
-                spawnedTroop.transform.position = finalSpawnPosition;
-                agent.enabled = true;
-            }
-
-            // Deduct the elixir cost and tell Update() the spawn was a success
-            currentElixir -= cost;
-            return true; 
+            SpawnEnemyUnit(giantPrefab, giantCost);
         }
-
-        // Not enough elixir, return false so the timer stays at 0 and tries again next frame
-        return false; 
+        // This is your Knight card
+        else if (randomUnit == 1 && currentElixir >= troopCost)
+        {
+            SpawnEnemyUnit(troopPrefab, troopCost);
+        }
+        else if (randomUnit == 2 && currentElixir >= archerCost)
+        {
+            SpawnEnemyUnit(archerPrefab, archerCost);
+        }
+        else if (randomUnit == 3 && currentElixir >= minipekkaCost)
+        {
+            SpawnEnemyUnit(minipekkaPrefab, minipekkaCost);
+        }
     }
 
-    Transform DetermineBestLane()
+    void SpawnEnemyUnit(GameObject prefab, int cost)
     {
-        GameObject[] playerTroops = GameObject.FindGameObjectsWithTag("Troop");
+        if (prefab == null) return;
 
-        if (playerTroops.Length > 0)
-        {
-            GameObject targetTroop = playerTroops[0];
+        // Choose a random invisible lane point
+        Transform randomLane = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            if (targetTroop.transform.position.x < 0)
-            {
-                return leftLaneSpawn;
-            }
-            else
-            {
-                return rightLaneSpawn;
-            }
-        }
+        // Spawn the unit
+        Instantiate(prefab, randomLane.position, randomLane.rotation);
 
-        int randomLane = Random.Range(0, 2);
-        return randomLane == 0 ? leftLaneSpawn : rightLaneSpawn;
+        // Deduct the elixir cost cleanly
+        currentElixir -= cost;
     }
 }
