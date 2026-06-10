@@ -17,6 +17,10 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private Vector3 originalPosition;
     private CanvasGroup canvasGroup;
     private CardManager cardManager;
+    private CardData currentCardData;
+    [Header("UI References")]
+    public Image cardImageComponent; 
+    public Text costText; // Assign this in the Inspector to show the elixir cost
 
     void Awake()
     {
@@ -83,6 +87,25 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                     Instantiate(troopPrefab, spawnPos, Quaternion.identity);
                 }
             }
+        }
+    }
+
+    // The Deck Manager will call this to give the slot a new card
+    public void LoadNewCard(CardData newCard)
+    {
+        this.currentCardData = newCard;
+        this.elixirCost = newCard.elixirCost;
+        this.troopPrefab = newCard.prefab;
+
+        // Set the background color tint dynamically
+        if (cardImageComponent != null)
+        {
+            cardImageComponent.color = newCard.cardColor;
+        }
+
+        if (costText != null)
+        {
+            costText.text = newCard.elixirCost.ToString();
         }
     }
 }

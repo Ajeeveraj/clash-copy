@@ -111,14 +111,12 @@ public class ArcherAttack : MonoBehaviour
         {
             GameObject newArrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, transform.rotation);
             
-            ArrowFlight flightScript = newArrow.GetComponent<ArrowFlight>();
+            ProjectileFlight flightScript = newArrow.GetComponent<ProjectileFlight>();
             if (flightScript != null)
             {
                 flightScript.damage = this.damage; 
                 flightScript.target = this.currentTarget; 
                 
-                // ADD THIS NEW LINE: Tell the arrow whose team it is on!
-                flightScript.isEnemyArrow = this.isEnemy; 
             }
         }
     }
