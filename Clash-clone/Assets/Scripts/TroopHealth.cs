@@ -19,9 +19,22 @@ public class TroopHealth : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>(true);
         colliders = GetComponentsInChildren<Collider>(true);
 
-        if (healthBar != null) healthBar.SetMax(currentHealth);
-    }
+        if (healthBar != null) 
+        {
+            healthBar.SetMax(currentHealth);
 
+            // MINION ONLY FIX: Lift the health bar up if this specific prefab flies
+            if (isFlying)
+            {
+                // Pushes the health bar 2.5 units into the air above the minion mesh
+                healthBar.transform.localPosition = new Vector3(
+                    healthBar.transform.localPosition.x, 
+                    2.5f, 
+                    healthBar.transform.localPosition.z
+                );
+            }
+        }
+    }
     public void TakeDamage(int amount)
     {
         if (isDead) return;

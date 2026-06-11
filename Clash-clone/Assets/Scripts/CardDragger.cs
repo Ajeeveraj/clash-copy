@@ -54,43 +54,54 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (currentCardData == null) return;
 
-        // FIX: Using eventData to find the world position directly
-        // (We use 10f for Z because that is usually the distance from the camera)
-        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f));
-
-        // 1. Check if the player is dropping the card on their side of the arena
-        if (spawnPos.z <= 2f)
+        // 1. FIX THE SLOT FREEZE: Re-enable mouse clicks and snap the UI back to center
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
         {
-            // 2. Check if the player has enough Elixir and deduct it
-            if (cardManager != null && cardManager.SpendElixir(elixirCost))
-            {
-                // SQUAD CHECKLIST
-                if (currentCardData.cardName.Contains("Archer"))
-                {
-                    Instantiate(troopPrefab, spawnPos + new Vector3(-0.75f, 0f, 0f), Quaternion.identity);
-                    Instantiate(troopPrefab, spawnPos + new Vector3(0.75f, 0f, 0f), Quaternion.identity);
-                }
-                else if (currentCardData.cardName.Contains("Minions"))
-                {
-                    Instantiate(troopPrefab, spawnPos + new Vector3(-1.0f, 0f, 0f), Quaternion.identity);
-                    Instantiate(troopPrefab, spawnPos, Quaternion.identity);
-                    Instantiate(troopPrefab, spawnPos + new Vector3(1.0f, 0f, 0f), Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(troopPrefab, spawnPos, Quaternion.identity);
-                }
+            canvasGroup.blocksRaycasts = true;
+        }
+        transform.localPosition = Vector3.zero;
 
-                // 3. Cycle the card
-                PlayerDeckManager deckManager = Object.FindFirstObjectByType<PlayerDeckManager>();
-                if (deckManager != null)
+        // 2. Safe floor coordinate math to prevent floating/NavMesh errors
+        Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+
+        if (groundPlane.Raycast(ray, out float rayDistance))
+        {
+            Vector3 spawnPos = ray.GetPoint(rayDistance);
+
+            // 3. Game logic checks
+            if (spawnPos.z <= 2f)
+            {
+                if (cardManager != null && cardManager.SpendElixir(elixirCost))
                 {
-                    deckManager.CardPlayed(this, currentCardData);
+                    // 4. SQUAD SPAWNING WITH OFFSETS RESTORED
+                    if (currentCardData.cardName.Contains("Archer"))
+                    {
+                        Instantiate(troopPrefab, spawnPos + new Vector3(-0.75f, 0f, 0f), Quaternion.identity);
+                        Instantiate(troopPrefab, spawnPos + new Vector3(0.75f, 0f, 0f), Quaternion.identity);
+                    }
+                    else if (currentCardData.cardName.Contains("Minion"))
+                    {
+                        Instantiate(troopPrefab, spawnPos + new Vector3(-1f, 0f, 0f), Quaternion.identity);
+                        Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                        Instantiate(troopPrefab, spawnPos + new Vector3(1f, 0f, 0f), Quaternion.identity);
+                    }
+                    else
+                    {
+                        Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                    }
+
+                    // 5. Cycle the card out of the hand
+                    PlayerDeckManager deckManager = Object.FindAnyObjectByType<PlayerDeckManager>();
+                    if (deckManager != null)
+                    {
+                        deckManager.CardPlayed(this, currentCardData);
+                    }
                 }
             }
         }
     }
-
     public void LoadNewCard(CardData newCard)
     {
         this.currentCardData = newCard;

@@ -83,24 +83,8 @@ public class EnemyAI : MonoBehaviour
 
         Transform randomLane = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        // ARCHER SQUAD CHECK
-        if (prefab == archerPrefab)
-        {
-            Instantiate(prefab, randomLane.position + new Vector3(-0.75f, 0f, 0f), randomLane.rotation);
-            Instantiate(prefab, randomLane.position + new Vector3(0.75f, 0f, 0f), randomLane.rotation);
-        }
-        // MINION SQUAD CHECK (ADD THIS!)
-        else if (prefab == minionsPrefab)
-        {
-            Instantiate(prefab, randomLane.position + new Vector3(-1f, 0f, 0f), randomLane.rotation);
-            Instantiate(prefab, randomLane.position, randomLane.rotation);
-            Instantiate(prefab, randomLane.position + new Vector3(1f, 0f, 0f), randomLane.rotation);
-        }
-        // EVERYONE ELSE
-        else
-        {
-            Instantiate(prefab, randomLane.position, randomLane.rotation);
-        }
+        // REVERTED: Clean and simple instantiation on the exact lane point.
+        Instantiate(prefab, randomLane.position, randomLane.rotation);
 
         currentElixir -= cost;
     }

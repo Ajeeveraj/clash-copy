@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107922f0cea90524fbed9a7cac304840, type: 3}
   m_Name: Card_Minions
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardName: 
-  elixirCost: 0
+  cardName: Minion
+  elixirCost: 3
   prefab: {fileID: 4930737716143853434, guid: b22f5db1488851142accb6b087ede8f6, type: 3}
   cardColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  spawnCount: 3
+  spawnCount: 1

@@ -26,11 +26,20 @@ public class ArcherAttack : MonoBehaviour
     {
         FindNearestTarget();
 
-        // If we have a target and it is within our attack range
-        if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.position) <= attackRange)
+        // FIX: Calculate distance ignoring height (Y-axis)
+        float distanceToTarget = Mathf.Infinity;
+        if (currentTarget != null)
+        {
+            Vector3 myFlatPos = new Vector3(transform.position.x, 0f, transform.position.z);
+            Vector3 targetFlatPos = new Vector3(currentTarget.position.x, 0f, currentTarget.position.z);
+            distanceToTarget = Vector3.Distance(myFlatPos, targetFlatPos);
+        }
+
+        // If we have a target and it is within our flat attack range
+        if (currentTarget != null && distanceToTarget <= attackRange)
         {
             // 1. Plant feet and stop moving (Clash Royale style)
-            agent.isStopped = true;
+            if (agent != null) agent.isStopped = true;
 
             // 2. Rotate to face the target
             FaceTarget();
@@ -63,10 +72,17 @@ public class ArcherAttack : MonoBehaviour
         float shortestDistance = Mathf.Infinity;
         GameObject nearestTarget = null;
 
+        Vector3 myFlatPos = new Vector3(transform.position.x, 0f, transform.position.z);
+
         // Check towers
         foreach (GameObject target in towers)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (target == null) continue;
+            
+            // FIX: Flatten position for tower check
+            Vector3 targetFlatPos = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
+            float distance = Vector3.Distance(myFlatPos, targetFlatPos);
+            
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -77,7 +93,12 @@ public class ArcherAttack : MonoBehaviour
         // Check troops
         foreach (GameObject target in troops)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (target == null) continue;
+            
+            // FIX: Flatten position for troop check (crucial for flying Minions)
+            Vector3 targetFlatPos = new Vector3(target.transform.position.x, 0f, target.transform.position.z);
+            float distance = Vector3.Distance(myFlatPos, targetFlatPos);
+            
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -116,12 +137,10 @@ public class ArcherAttack : MonoBehaviour
             {
                 flightScript.damage = this.damage; 
                 flightScript.target = this.currentTarget; 
-                
             }
         }
     }
 
-    // Visualizes the attack range circle in the Unity Scene View
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

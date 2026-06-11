@@ -21,7 +21,9 @@ public class GiantAttack : MonoBehaviour
         
         if (agent != null)
         {
-            agent.stoppingDistance = attackRange - 0.2f; 
+            // This forces the agent to stop walking when it is exactly at the attack range
+            // We subtract 0.5f to give it a little buffer so it's safely "in range"
+            agent.stoppingDistance = attackRange - 0.5f; 
         }
     }
 
@@ -46,15 +48,17 @@ public class GiantAttack : MonoBehaviour
 
     void Attack()
     {
-        Debug.Log($"Giant smashed the {currentTarget.name} for {damage} damage!");
-        
-        /* Uncomment this when your Tower health script is ready
         TowerHealth towerHealth = currentTarget.GetComponent<TowerHealth>();
+        
         if (towerHealth != null) 
         { 
-            towerHealth.TakeDamage(damage); 
+            towerHealth.TakeDamage((int)damage); // Ensure damage is passed as an int
+            Debug.Log($"Giant smashed the {currentTarget.name} for {damage} damage!");
         }
-        */
+        else
+        {
+            Debug.LogWarning("Giant is attacking, but the target is missing a TowerHealth script!");
+        }
     }
 
     void FindNearestTower()

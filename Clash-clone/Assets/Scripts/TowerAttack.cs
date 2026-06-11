@@ -24,8 +24,17 @@ public class TowerAttack : MonoBehaviour
 
     void Update()
     {
-        // Find a target if we don't have one, or if it walks out of range
-        if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.position) > attackRange)
+        // FIX: Calculate target distance on a flat horizontal plane
+        float distanceToTarget = Mathf.Infinity;
+        if (currentTarget != null)
+        {
+            Vector3 myFlatPos = new Vector3(transform.position.x, 0f, transform.position.z);
+            Vector3 targetFlatPos = new Vector3(currentTarget.position.x, 0f, currentTarget.position.z);
+            distanceToTarget = Vector3.Distance(myFlatPos, targetFlatPos);
+        }
+
+        // Find a target if we don't have one, or if it walks out of flat range
+        if (currentTarget == null || distanceToTarget > attackRange)
         {
             FindNearestValidTarget();
         }
@@ -36,11 +45,6 @@ public class TowerAttack : MonoBehaviour
             Vector3 targetDir = currentTarget.position - transform.position;
             targetDir.y = 0; 
             
-            if (targetDir != Vector3.zero)
-            {
-                
-            }
-
             if (Time.time >= nextFireTime)
             {
                 Shoot();
@@ -55,12 +59,10 @@ public class TowerAttack : MonoBehaviour
 
         if (isPlayerTower)
         {
-            // Player towers ONLY target enemy units
             targetTag = ENEMY_TROOP_TAG;
         }
         else if (isEnemyTower)
         {
-            // Enemy towers ONLY target player units
             targetTag = PLAYER_TROOP_TAG;
         }
         else
@@ -72,6 +74,8 @@ public class TowerAttack : MonoBehaviour
         float closestDistance = Mathf.Infinity;
         GameObject closestTroop = null;
 
+        Vector3 myFlatPos = new Vector3(transform.position.x, 0f, transform.position.z);
+
         foreach (GameObject troop in targets)
         {
             if (troop != null)
@@ -79,7 +83,10 @@ public class TowerAttack : MonoBehaviour
                 TroopHealth th = troop.GetComponentInParent<TroopHealth>();
                 if (th != null && th.isDead) continue;
 
-                float distance = Vector3.Distance(transform.position, troop.transform.position);
+                // FIX: Flatten position calculation to prevent flying units from bypassing the range check
+                Vector3 troopFlatPos = new Vector3(troop.transform.position.x, 0f, troop.transform.position.z);
+                float distance = Vector3.Distance(myFlatPos, troopFlatPos);
+                
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -88,6 +95,7 @@ public class TowerAttack : MonoBehaviour
             }
         }
 
+        // closestDistance is already flat here, so it accurately reflects ground positioning
         if (closestTroop != null && closestDistance <= attackRange)
         {
             currentTarget = closestTroop.transform;

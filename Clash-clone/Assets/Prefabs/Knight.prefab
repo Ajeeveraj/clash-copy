@@ -175,6 +175,7 @@ MonoBehaviour:
   currentHealth: 0
   isDead: 0
   healthBar: {fileID: 7763943231938179342}
+  isFlying: 1
 --- !u!195 &6424069251167972979
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -274,6 +275,10 @@ PrefabInstance:
     - target: {fileID: 5321466208793168972, guid: 26c05988037184d40b32a206714291ef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6837105904089018999, guid: 26c05988037184d40b32a206714291ef, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7475364991032763223, guid: 26c05988037184d40b32a206714291ef, type: 3}
       propertyPath: m_Layer

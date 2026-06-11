@@ -32,28 +32,45 @@ public class MinionAttack : MonoBehaviour
             currentTarget = null;
         }
 
-        // 2. Targeting Logic (Minions target ANY enemy troop or tower)
-        if (currentTarget == null)
-        {
-            currentTarget = LookForNearbyEnemies();
+        // 2. FIXED TARGETING LOGIC: Troops always distract minions away from towers!
+        Transform nearbyTroop = LookForNearbyEnemies();
 
-            if (currentTarget == null)
-            {
-                currentTarget = FindClosestTower();
-            }
+        if (nearbyTroop != null)
+        {
+            // If an enemy troop walks into our radius, immediately swap to them
+            currentTarget = nearbyTroop;
+        }
+        else if (currentTarget == null)
+        {
+            // Only head to the tower if there are absolutely no enemy troops around
+            currentTarget = FindClosestTower();
         }
 
-        // 3. Combat Execution
+        // 3. Combat & Movement Execution
         if (currentTarget != null)
         {
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
 
             if (distanceToTarget <= GetActualAttackRange(currentTarget))
             {
+                // IN RANGE: Stop walking and attack
+                if (myAgent != null && myAgent.hasPath) 
+                {
+                    myAgent.ResetPath(); 
+                }
+
                 if (Time.time >= nextAttackTime)
                 {
                     Attack();
                     nextAttackTime = Time.time + attackCooldown;
+                }
+            }
+            else
+            {
+                // OUT OF RANGE: Chase the target down!
+                if (myAgent != null)
+                {
+                    myAgent.SetDestination(currentTarget.position);
                 }
             }
         }
