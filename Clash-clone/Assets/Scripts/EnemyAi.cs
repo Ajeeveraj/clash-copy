@@ -7,9 +7,11 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Unit Prefabs")]
     public GameObject giantPrefab;
-    public GameObject troopPrefab;
+    public GameObject troopPrefab; 
     public GameObject archerPrefab;
     public GameObject minipekkaPrefab; 
+    public GameObject musketeerPrefab; 
+    public GameObject minionsPrefab; // Added Minion Prefab slot!
 
     [Header("Elixir Settings")]
     public float currentElixir = 5f;
@@ -20,6 +22,8 @@ public class EnemyAI : MonoBehaviour
     private int troopCost = 3;
     private int archerCost = 3;
     private int minipekkaCost = 4; 
+    private int musketeerCost = 4; 
+    private int minionsCost = 3; // Added Minion Cost!
 
     [Header("Timer Settings")]
     private float decisionTimer = 0f;
@@ -27,13 +31,11 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        // 1. Regenerate Elixir automatically over time
         if (currentElixir < maxElixir)
         {
             currentElixir += elixirRegenSpeed * Time.deltaTime;
         }
 
-        // 2. The Spawning Timer
         decisionTimer += Time.deltaTime;
         if (decisionTimer >= decisionInterval)
         {
@@ -46,15 +48,13 @@ public class EnemyAI : MonoBehaviour
     {
         if (spawnPoints.Length == 0) return;
 
-        // Pick a random unit archetype: 0 = Giant, 1 = Troop, 2 = Archer, 3 = Mini P.E.K.K.A
-        int randomUnit = Random.Range(0, 4); 
+        // Pick a random unit archetype: changed max to 6 now that Minions are here
+        int randomUnit = Random.Range(0, 6); 
 
-        // Check if we have enough Elixir to afford the chosen card
         if (randomUnit == 0 && currentElixir >= giantCost)
         {
             SpawnEnemyUnit(giantPrefab, giantCost);
         }
-        // This is your Knight card
         else if (randomUnit == 1 && currentElixir >= troopCost)
         {
             SpawnEnemyUnit(troopPrefab, troopCost);
@@ -67,19 +67,41 @@ public class EnemyAI : MonoBehaviour
         {
             SpawnEnemyUnit(minipekkaPrefab, minipekkaCost);
         }
+        else if (randomUnit == 4 && currentElixir >= musketeerCost)
+        {
+            SpawnEnemyUnit(musketeerPrefab, musketeerCost);
+        }
+        else if (randomUnit == 5 && currentElixir >= minionsCost)
+        {
+            SpawnEnemyUnit(minionsPrefab, minionsCost);
+        }
     }
 
     void SpawnEnemyUnit(GameObject prefab, int cost)
     {
         if (prefab == null) return;
 
-        // Choose a random invisible lane point
         Transform randomLane = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        // Spawn the unit
-        Instantiate(prefab, randomLane.position, randomLane.rotation);
+        // ARCHER SQUAD CHECK
+        if (prefab == archerPrefab)
+        {
+            Instantiate(prefab, randomLane.position + new Vector3(-0.75f, 0f, 0f), randomLane.rotation);
+            Instantiate(prefab, randomLane.position + new Vector3(0.75f, 0f, 0f), randomLane.rotation);
+        }
+        // MINION SQUAD CHECK (ADD THIS!)
+        else if (prefab == minionsPrefab)
+        {
+            Instantiate(prefab, randomLane.position + new Vector3(-1f, 0f, 0f), randomLane.rotation);
+            Instantiate(prefab, randomLane.position, randomLane.rotation);
+            Instantiate(prefab, randomLane.position + new Vector3(1f, 0f, 0f), randomLane.rotation);
+        }
+        // EVERYONE ELSE
+        else
+        {
+            Instantiate(prefab, randomLane.position, randomLane.rotation);
+        }
 
-        // Deduct the elixir cost cleanly
         currentElixir -= cost;
     }
 }

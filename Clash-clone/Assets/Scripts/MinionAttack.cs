@@ -1,16 +1,15 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TroopAttack : MonoBehaviour
+public class MinionAttack : MonoBehaviour
 {
     public bool isEnemy;
     public Transform currentTarget;
 
-    
     [Header("Combat Settings")]
-    public float attackRange = 1.0f;
+    public float attackRange = 1.2f; // Slightly more range since they attack from the air
     [SerializeField] private float attackCooldown = 1.0f;
-    [SerializeField] private int damage = 50;
+    [SerializeField] private int damage = 40;
     [SerializeField] public float detectionRadius = 8.0f; 
 
     private float nextAttackTime;
@@ -33,47 +32,18 @@ public class TroopAttack : MonoBehaviour
             currentTarget = null;
         }
 
-        // 2. Target Selection & Stickiness (THE FIX)
+        // 2. Targeting Logic (Minions target ANY enemy troop or tower)
         if (currentTarget == null)
         {
-            // Priority 1: Look for nearby troops first
             currentTarget = LookForNearbyEnemies();
 
-            // Priority 2: If no troops around, walk to the closest tower
             if (currentTarget == null)
             {
                 currentTarget = FindClosestTower();
             }
         }
-        else // WE HAVE A TARGET
-        {
-            bool isCurrentTargetATower = currentTarget.CompareTag("PlayerTower") || currentTarget.CompareTag("EnemyTower");
-            
-            // If we are walking towards a tower, we can get distracted by closer troops.
-            // But if we are already in attack range, we LOCK ON and ignore distractions.
-            if (isCurrentTargetATower)
-            {
-                float distToTower = Vector3.Distance(transform.position, currentTarget.position);
-                bool activelyAttacking = distToTower <= GetActualAttackRange(currentTarget);
 
-                if (!activelyAttacking)
-                {
-                    Transform nearbyTroop = LookForNearbyEnemies();
-                    if (nearbyTroop != null)
-                    {
-                        float distToTroop = Vector3.Distance(transform.position, nearbyTroop.position);
-                        
-                        // ONLY get distracted if the new troop is CLOSER than the tower
-                        if (distToTroop < distToTower)
-                        {
-                            currentTarget = nearbyTroop;
-                        }
-                    }
-                }
-            }
-        }
-
-        // 3. Combat Execution using EDGE-TO-EDGE distance
+        // 3. Combat Execution
         if (currentTarget != null)
         {
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
@@ -121,8 +91,8 @@ public class TroopAttack : MonoBehaviour
         {
             if (e == null) continue;
             if (e.TryGetComponent<TroopHealth>(out var th) && th.isDead) continue;
-            if (th != null && th.isFlying) continue;
 
+            // Note: No flying check here! Minions claw ground troops and air troops alike.
             float d = Vector3.Distance(transform.position, e.transform.position);
             if (d <= detectionRadius && d < dist) { dist = d; closest = e.transform; }
         }

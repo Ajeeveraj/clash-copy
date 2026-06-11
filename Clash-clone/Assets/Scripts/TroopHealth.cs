@@ -8,6 +8,7 @@ public class TroopHealth : MonoBehaviour
     [HideInInspector] public bool isDead = false;
 
     public HealthBar healthBar;
+    public bool isFlying = false; // Check this box ONLY on the Minion prefab!
 
     private Renderer[] renderers;
     private Collider[] colliders;

@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent), typeof(TroopAttack))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class TroopMovement : MonoBehaviour
 {
     private NavMeshAgent agent;
-    private TroopAttack attack;
+    
+    // We create slots for both scripts. Only one will actually be filled!
+    private TroopAttack groundAttack;
+    private MinionAttack flyingAttack;
 
     private float pathUpdateCooldown = 0.2f;
     private float pathUpdateTimer;
@@ -13,7 +16,10 @@ public class TroopMovement : MonoBehaviour
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        attack = GetComponent<TroopAttack>();
+        
+        // The script checks the prefab. It fills whichever one exists and leaves the other null.
+        groundAttack = GetComponent<TroopAttack>();
+        flyingAttack = GetComponent<MinionAttack>();
     }
 
     void Start()
@@ -26,22 +32,27 @@ public class TroopMovement : MonoBehaviour
         // If the agent is off the NavMesh, don't try to move
         if (!agent.enabled || !agent.isOnNavMesh) return;
 
+        // 1. Ask our helper method for the current target
+        Transform currentTarget = GetTarget();
+
         // IF WE HAVE NO TARGET, STOP
-        if (attack.currentTarget == null)
+        if (currentTarget == null)
         {
             StopMovingFully();
             return;
         }
 
         // TARGETING LOGIC
-        float distanceToTarget = Vector3.Distance(transform.position, attack.currentTarget.position);
-        float combatRange = attack.GetActualAttackRange(attack.currentTarget);
+        float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+        
+        // 2. Ask our helper method for the correct combat range
+        float combatRange = GetCombatRange(currentTarget);
 
         if (distanceToTarget <= combatRange)
         {
             StopMovingFully();
             // Handle rotation only
-            Vector3 lookDir = attack.currentTarget.position - transform.position;
+            Vector3 lookDir = currentTarget.position - transform.position;
             lookDir.y = 0;
             if (lookDir.sqrMagnitude > 0.01f)
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir.normalized), Time.deltaTime * 12f);
@@ -49,8 +60,36 @@ public class TroopMovement : MonoBehaviour
         }
 
         // CHASE LOGIC
-        ChaseTarget(attack.currentTarget.position);
+        ChaseTarget(currentTarget.position);
     }
+
+    // ==========================================
+    // HELPER METHODS (The Fix!)
+    // ==========================================
+    
+    private Transform GetTarget()
+    {
+        // If we have the ground script, use its target
+        if (groundAttack != null) return groundAttack.currentTarget;
+        
+        // If we have the flying script, use its target
+        if (flyingAttack != null) return flyingAttack.currentTarget;
+        
+        return null;
+    }
+
+    private float GetCombatRange(Transform target)
+    {
+        // If we have the ground script, use its range
+        if (groundAttack != null) return groundAttack.GetActualAttackRange(target);
+        
+        // If we have the flying script, use its range
+        if (flyingAttack != null) return flyingAttack.GetActualAttackRange(target);
+        
+        return 0f;
+    }
+
+    // ==========================================
 
     private void ChaseTarget(Vector3 targetPosition)
     {

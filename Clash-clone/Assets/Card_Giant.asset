@@ -15,4 +15,5 @@ MonoBehaviour:
   cardName: Giant
   elixirCost: 5
   prefab: {fileID: 4502407916692422552, guid: 41f77e90da9b4fc4694246535219bf10, type: 3}
-  cardColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  cardColor: {r: 0, g: 1, b: 0, a: 1}
+  spawnCount: 1

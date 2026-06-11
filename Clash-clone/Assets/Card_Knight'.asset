@@ -15,4 +15,5 @@ MonoBehaviour:
   cardName: Knight
   elixirCost: 3
   prefab: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
-  cardColor: {r: 0, g: 0, b: 1, a: 1}
+  cardColor: {r: 0.4117647, g: 0.4117647, b: 0.4117647, a: 1}
+  spawnCount: 1

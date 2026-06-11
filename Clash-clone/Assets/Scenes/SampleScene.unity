@@ -1245,7 +1245,7 @@ MonoBehaviour:
   troopPrefab: {fileID: 3971138963526679291, guid: e76d294ea1e287b4b8f181395de28b4b, type: 3}
   minDeploymentZ: -20
   maxDeploymentZ: 2
-  cardImageComponent: {fileID: 0}
+  cardImageComponent: {fileID: 1036334933}
   costText: {fileID: 0}
 --- !u!114 &643044168
 MonoBehaviour:
@@ -1320,6 +1320,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 68d6fc7eea63d9942997fbe681f9359c, type: 2}
   - {fileID: 11400000, guid: 0d35face8423a3443b96468d2f24a3b1, type: 2}
   - {fileID: 11400000, guid: af05396989fc95948bf8d34cc4f52359, type: 2}
+  - {fileID: 11400000, guid: 4ee91cde3b5fdcc4fbc5a4790ad578fd, type: 2}
   cardSlots:
   - {fileID: 1138298206}
   - {fileID: 1083844858}
@@ -1772,6 +1773,8 @@ MonoBehaviour:
   troopPrefab: {fileID: 1653685239389759972, guid: fa05a5cafc18a9543987199794dd0f79, type: 3}
   archerPrefab: {fileID: 4231284444222409777, guid: 4229d1e331b3d164a829a2e2e05ede77, type: 3}
   minipekkaPrefab: {fileID: 7788454710120711776, guid: a373a66c211a7c34cbd92fd6e84b24b5, type: 3}
+  musketeerPrefab: {fileID: 0}
+  minionsPrefab: {fileID: 0}
   currentElixir: 5
   maxElixir: 10
   elixirRegenSpeed: 0.35
@@ -2156,7 +2159,7 @@ MonoBehaviour:
   troopPrefab: {fileID: 7832644713721983595, guid: 7596a9517f8076348aba4cabc939b393, type: 3}
   minDeploymentZ: -20
   maxDeploymentZ: 2
-  cardImageComponent: {fileID: 0}
+  cardImageComponent: {fileID: 825605301}
   costText: {fileID: 0}
 --- !u!114 &1048105979
 MonoBehaviour:
@@ -2251,7 +2254,7 @@ MonoBehaviour:
   troopPrefab: {fileID: 4502407916692422552, guid: 41f77e90da9b4fc4694246535219bf10, type: 3}
   minDeploymentZ: -20
   maxDeploymentZ: 2
-  cardImageComponent: {fileID: 0}
+  cardImageComponent: {fileID: 2049140371}
   costText: {fileID: 0}
 --- !u!114 &1083844859
 MonoBehaviour:
@@ -2491,7 +2494,7 @@ MonoBehaviour:
   troopPrefab: {fileID: 1653685239389759972, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
   minDeploymentZ: -20
   maxDeploymentZ: 2
-  cardImageComponent: {fileID: 0}
+  cardImageComponent: {fileID: 793782344}
   costText: {fileID: 0}
 --- !u!1 &1258421230
 GameObject:

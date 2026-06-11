@@ -18,14 +18,13 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private CanvasGroup canvasGroup;
     private CardManager cardManager;
     private CardData currentCardData;
+    
     [Header("UI References")]
     public Image cardImageComponent; 
-    public Text costText; // Assign this in the Inspector to show the elixir cost
+    public Text costText; 
 
     void Awake()
     {
-        // This forces the limit to 2 immediately when the game starts,
-        // ignoring any old "4" saved in the Inspector.
         maxDeploymentZ = 2f;
     }
 
@@ -53,51 +52,51 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true;
-        transform.position = originalPosition;
+        if (currentCardData == null) return;
 
-        if (Pointer.current == null) return;
+        // FIX: Using eventData to find the world position directly
+        // (We use 10f for Z because that is usually the distance from the camera)
+        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 10f));
 
-        Ray ray = Camera.main.ScreenPointToRay(Pointer.current.position.ReadValue());
-        int groundLayer = LayerMask.GetMask("ground"); 
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer))
+        // 1. Check if the player is dropping the card on their side of the arena
+        if (spawnPos.z <= 2f)
         {
-            // Check for River OR PlayerTower OR EnemyTower
-            if (hit.collider.CompareTag("River") || 
-                hit.collider.CompareTag("PlayerTower") || 
-                hit.collider.CompareTag("EnemyTower"))
+            // 2. Check if the player has enough Elixir and deduct it
+            if (cardManager != null && cardManager.SpendElixir(elixirCost))
             {
-                Debug.Log($"Rejected: You hit a {hit.collider.tag}. Cannot place here.");
-                return;
-            }
-
-            Vector3 spawnPos = hit.point;
-            
-            // Snap to NavMesh
-            if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 0.5f, NavMesh.AllAreas))
-            {
-                spawnPos = navHit.position;
-            }
-
-            if (spawnPos.z <= 2f)
-            {
-                if (cardManager != null && cardManager.SpendElixir(elixirCost))
+                // SQUAD CHECKLIST
+                if (currentCardData.cardName.Contains("Archer"))
+                {
+                    Instantiate(troopPrefab, spawnPos + new Vector3(-0.75f, 0f, 0f), Quaternion.identity);
+                    Instantiate(troopPrefab, spawnPos + new Vector3(0.75f, 0f, 0f), Quaternion.identity);
+                }
+                else if (currentCardData.cardName.Contains("Minions"))
+                {
+                    Instantiate(troopPrefab, spawnPos + new Vector3(-1.0f, 0f, 0f), Quaternion.identity);
+                    Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                    Instantiate(troopPrefab, spawnPos + new Vector3(1.0f, 0f, 0f), Quaternion.identity);
+                }
+                else
                 {
                     Instantiate(troopPrefab, spawnPos, Quaternion.identity);
+                }
+
+                // 3. Cycle the card
+                PlayerDeckManager deckManager = Object.FindFirstObjectByType<PlayerDeckManager>();
+                if (deckManager != null)
+                {
+                    deckManager.CardPlayed(this, currentCardData);
                 }
             }
         }
     }
 
-    // The Deck Manager will call this to give the slot a new card
     public void LoadNewCard(CardData newCard)
     {
         this.currentCardData = newCard;
         this.elixirCost = newCard.elixirCost;
         this.troopPrefab = newCard.prefab;
 
-        // Set the background color tint dynamically
         if (cardImageComponent != null)
         {
             cardImageComponent.color = newCard.cardColor;
