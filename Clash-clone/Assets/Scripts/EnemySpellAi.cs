@@ -4,6 +4,7 @@ public class EnemySpellAI : MonoBehaviour
 {
     [Header("Spell Settings")]
     public GameObject enemyFireballPrefab;
+    public GameObject enemyArrowPrefab; // <- Added this so it shows up in your Inspector
     public float fireballBlastRadius = 2.5f; 
     public int minimumTroopsToTarget = 3;
 
@@ -35,7 +36,6 @@ public class EnemySpellAI : MonoBehaviour
 
     void AnalyzeBoardForTargets()
     {
-        // UPDATED: Now looks for "Troop" instead of "PlayerTroop"
         GameObject[] playerTroops = GameObject.FindGameObjectsWithTag("Troop");
 
         if (playerTroops.Length < minimumTroopsToTarget) return;
@@ -73,11 +73,10 @@ public class EnemySpellAI : MonoBehaviour
     void CastFireball(Vector3 targetPos, int clusterSize)
     {
         targetPos.y = 0f;
-        Vector3 skyPos = targetPos + new Vector3(0f, 12f, -4f);
+        Vector3 skyPos = new Vector3(targetPos.x, 12f, 20f);
         
         GameObject fireball = Instantiate(enemyFireballPrefab, skyPos, Quaternion.LookRotation(Vector3.down));
 
-        // Simply turn the toggle ON for the enemy prefab
         if (fireball.TryGetComponent<FireballProjectile>(out var fbScript))
         {
             fbScript.isEnemySpell = true; 

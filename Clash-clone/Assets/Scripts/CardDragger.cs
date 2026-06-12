@@ -69,9 +69,10 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (groundPlane.Raycast(ray, out float rayDistance))
         {
             Vector3 spawnPos = ray.GetPoint(rayDistance);
+            string cardNameLower = currentCardData.cardName.ToLower();
 
-            // 3. Game logic checks (UPDATED: Fireball ignores the Z-zone limit so you can hit enemy towers!)
-            if (spawnPos.z <= 2f || currentCardData.cardName.Contains("Fireball"))
+            // 3. Game logic checks (UPDATED: Fireball AND Arrows ignore the Z-zone limit so you can hit enemy towers!)
+            if (spawnPos.z <= 2f || cardNameLower.Contains("fireball") || cardNameLower.Contains("arrows"))
             {
                 if (cardManager != null && cardManager.SpendElixir(elixirCost))
                 {
@@ -87,11 +88,13 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         Instantiate(troopPrefab, spawnPos, Quaternion.identity);
                         Instantiate(troopPrefab, spawnPos + new Vector3(1f, 0f, 0f), Quaternion.identity);
                     }
-                    else if (currentCardData.cardName.Contains("Fireball"))
+                    else if (cardNameLower.Contains("fireball") || cardNameLower.Contains("arrows"))
                     {
-                        // Spawn high in the sky over the target
-                        Vector3 skyPos = spawnPos + new Vector3(0f, 12f, -4f);
-                        GameObject fireball = Instantiate(troopPrefab, skyPos, Quaternion.LookRotation(Vector3.down));
+                        // Spawns from the player's backline to create the gliding effect
+                        Vector3 skyPos = new Vector3(spawnPos.x, 12f, -20f);
+                        
+                        // Using Quaternion.identity so the projectile script slants itself
+                        GameObject fireball = Instantiate(troopPrefab, skyPos, Quaternion.identity);
                         
                         // Pass the exact floor position to the projectile
                         if (fireball.TryGetComponent<FireballProjectile>(out var fbScript))

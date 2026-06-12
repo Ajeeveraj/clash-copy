@@ -16,6 +16,9 @@ public class FireballProjectile : MonoBehaviour
     {
         targetPosition = groundTarget;
         isInitialized = true;
+        // Slant the prefab
+        Vector3 flightDirection = targetPosition - transform.position;
+        transform.rotation = Quaternion.LookRotation(flightDirection);
     }
 
     void Update()
