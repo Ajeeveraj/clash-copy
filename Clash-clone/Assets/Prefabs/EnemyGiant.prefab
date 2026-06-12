@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: isEnemy
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 912387721281376879, guid: 41f77e90da9b4fc4694246535219bf10, type: 3}
+      propertyPath: isFlying
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1076818333566882455, guid: 41f77e90da9b4fc4694246535219bf10, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

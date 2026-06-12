@@ -181,6 +181,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1313247790}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &67360846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 67360848}
+  - component: {fileID: 67360847}
+  m_Layer: 0
+  m_Name: SpellManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &67360847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67360846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efcfc62c1f952943a1129872209225c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpellCaster
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  currentElixir: 5
+  maxElixir: 10
+  elixirRegenSpeed: 0.35
+--- !u!4 &67360848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67360846}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.51, z: -1.1412}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &133515209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,6 +1371,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0d35face8423a3443b96468d2f24a3b1, type: 2}
   - {fileID: 11400000, guid: af05396989fc95948bf8d34cc4f52359, type: 2}
   - {fileID: 11400000, guid: 4ee91cde3b5fdcc4fbc5a4790ad578fd, type: 2}
+  - {fileID: 11400000, guid: 4422abd633baf1b4fb45d081e3eda323, type: 2}
   cardSlots:
   - {fileID: 1138298206}
   - {fileID: 1083844858}
@@ -1747,6 +1798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 868757929}
   - component: {fileID: 868757928}
+  - component: {fileID: 868757930}
   m_Layer: 0
   m_Name: EnemyAi_Manager
   m_TagString: Untagged
@@ -1773,8 +1825,8 @@ MonoBehaviour:
   troopPrefab: {fileID: 1653685239389759972, guid: fa05a5cafc18a9543987199794dd0f79, type: 3}
   archerPrefab: {fileID: 4231284444222409777, guid: 4229d1e331b3d164a829a2e2e05ede77, type: 3}
   minipekkaPrefab: {fileID: 7788454710120711776, guid: a373a66c211a7c34cbd92fd6e84b24b5, type: 3}
-  musketeerPrefab: {fileID: 0}
-  minionsPrefab: {fileID: 0}
+  musketeerPrefab: {fileID: 904324263371841815, guid: 9b50fd4391ea80b44a3d457351fb89f1, type: 3}
+  minionsPrefab: {fileID: 4482799928432643745, guid: 7e2646346b437004e80d15f5956fda8a, type: 3}
   currentElixir: 5
   maxElixir: 10
   elixirRegenSpeed: 0.35
@@ -1794,6 +1846,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &868757930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868757927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8ff334f80c54c848b190bf8b578203d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpellAI
+  enemyFireballPrefab: {fileID: 8389365030721924511, guid: 57572c32fa42d8d4bbdda7523760d89f, type: 3}
+  fireballBlastRadius: 3.5
+  minimumTroopsToTarget: 3
+  checkInterval: 1.5
+  spellCooldown: 5
 --- !u!1 &878217680
 GameObject:
   m_ObjectHideFlags: 0
@@ -4916,3 +4985,4 @@ SceneRoots:
   - {fileID: 630813712}
   - {fileID: 868757929}
   - {fileID: 670564679}
+  - {fileID: 67360848}

@@ -83,8 +83,22 @@ public class EnemyAI : MonoBehaviour
 
         Transform randomLane = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        // REVERTED: Clean and simple instantiation on the exact lane point.
-        Instantiate(prefab, randomLane.position, randomLane.rotation);
+        // 1. Determine group spawn size dynamically
+        int spawnCount = 1;
+        if (prefab == archerPrefab) spawnCount = 2;
+        else if (prefab == minionsPrefab) spawnCount = 3;
+
+        // 2. Loop to spawn the entire squad side-by-side
+        for (int i = 0; i < spawnCount; i++)
+        {
+            // Centers the group and offsets each unit by 0.7 units to the left or right
+            float horizontalOffset = (i - (spawnCount - 1) * 0.5f) * 0.7f;
+            
+            // Uses randomLane.right so the offset matches whichever way your lane point is rotated
+            Vector3 finalPosition = randomLane.position + (randomLane.right * horizontalOffset);
+
+            Instantiate(prefab, finalPosition, randomLane.rotation);
+        }
 
         currentElixir -= cost;
     }

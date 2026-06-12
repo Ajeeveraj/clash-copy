@@ -6,7 +6,6 @@ public class TroopAttack : MonoBehaviour
     public bool isEnemy;
     public Transform currentTarget;
 
-    
     [Header("Combat Settings")]
     public float attackRange = 1.0f;
     [SerializeField] private float attackCooldown = 1.0f;
@@ -33,44 +32,18 @@ public class TroopAttack : MonoBehaviour
             currentTarget = null;
         }
 
-        // 2. Target Selection & Stickiness (THE FIX)
-        if (currentTarget == null)
-        {
-            // Priority 1: Look for nearby troops first
-            currentTarget = LookForNearbyEnemies();
+        // 2. Target Selection & Priority (THE REBELS VS BUILDINGS FIX)
+        Transform nearbyTroop = LookForNearbyEnemies();
 
-            // Priority 2: If no troops around, walk to the closest tower
-            if (currentTarget == null)
-            {
-                currentTarget = FindClosestTower();
-            }
+        if (nearbyTroop != null)
+        {
+            // Enemy troops inside our vision radius ALWAYS take priority over static structures
+            currentTarget = nearbyTroop;
         }
-        else // WE HAVE A TARGET
+        else if (currentTarget == null || currentTarget.CompareTag("PlayerTower") || currentTarget.CompareTag("EnemyTower"))
         {
-            bool isCurrentTargetATower = currentTarget.CompareTag("PlayerTower") || currentTarget.CompareTag("EnemyTower");
-            
-            // If we are walking towards a tower, we can get distracted by closer troops.
-            // But if we are already in attack range, we LOCK ON and ignore distractions.
-            if (isCurrentTargetATower)
-            {
-                float distToTower = Vector3.Distance(transform.position, currentTarget.position);
-                bool activelyAttacking = distToTower <= GetActualAttackRange(currentTarget);
-
-                if (!activelyAttacking)
-                {
-                    Transform nearbyTroop = LookForNearbyEnemies();
-                    if (nearbyTroop != null)
-                    {
-                        float distToTroop = Vector3.Distance(transform.position, nearbyTroop.position);
-                        
-                        // ONLY get distracted if the new troop is CLOSER than the tower
-                        if (distToTroop < distToTower)
-                        {
-                            currentTarget = nearbyTroop;
-                        }
-                    }
-                }
-            }
+            // If no enemy troops are around, lock back onto the closest tower
+            currentTarget = FindClosestTower();
         }
 
         // 3. Combat Execution using EDGE-TO-EDGE distance

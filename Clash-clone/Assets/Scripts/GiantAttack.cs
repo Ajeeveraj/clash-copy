@@ -21,19 +21,22 @@ public class GiantAttack : MonoBehaviour
         
         if (agent != null)
         {
-            // This forces the agent to stop walking when it is exactly at the attack range
-            // We subtract 0.5f to give it a little buffer so it's safely "in range"
+            // If attackRange is 3.0, the Giant will stop at 2.5 units away
+            // This guarantees it is well within range to trigger the attack
             agent.stoppingDistance = attackRange - 0.5f; 
         }
     }
-
     void Update()
     {
         FindNearestTower();
 
         if (currentTarget != null)
         {
-            float distance = Vector3.Distance(transform.position, currentTarget.position);
+            // Vector3.Distance factors in height (Y). Let's calculate flat distance instead:
+            Vector3 flatGiantPos = new Vector3(transform.position.x, 0f, transform.position.z);
+            Vector3 flatTargetPos = new Vector3(currentTarget.position.x, 0f, currentTarget.position.z);
+            
+            float distance = Vector3.Distance(flatGiantPos, flatTargetPos);
 
             if (distance <= attackRange)
             {
@@ -45,19 +48,20 @@ public class GiantAttack : MonoBehaviour
             }
         }
     }
-
     void Attack()
     {
+        // Try to find the TowerHealth script on the target
         TowerHealth towerHealth = currentTarget.GetComponent<TowerHealth>();
         
         if (towerHealth != null) 
         { 
-            towerHealth.TakeDamage((int)damage); // Ensure damage is passed as an int
+            // This actually calls the function in your new script!
+            towerHealth.TakeDamage(damage); 
             Debug.Log($"Giant smashed the {currentTarget.name} for {damage} damage!");
         }
         else
         {
-            Debug.LogWarning("Giant is attacking, but the target is missing a TowerHealth script!");
+            Debug.LogWarning("Giant is in range, but the target doesn't have a TowerHealth script attached!");
         }
     }
 

@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: damage
       value: 300
       objectReference: {fileID: 0}
+    - target: {fileID: 5966447449720613910, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: detectionRadius
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6424069251167972979, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: m_Speed
       value: 2

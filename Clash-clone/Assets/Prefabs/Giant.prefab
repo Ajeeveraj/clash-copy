@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -6619827321356549101, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
+      propertyPath: isFlying
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6619827321356549101, guid: 641887685abf6f142a6a39bdfea4daaf, type: 3}
       propertyPath: maxHealth
       value: 1500
       objectReference: {fileID: 0}
@@ -109,7 +113,7 @@ MonoBehaviour:
   isEnemy: 0
   damage: 200
   attackRate: 1.5
-  attackRange: 3
+  attackRange: 4.5
 --- !u!114 &8630409523886916963
 MonoBehaviour:
   m_ObjectHideFlags: 0

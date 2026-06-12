@@ -70,8 +70,8 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Vector3 spawnPos = ray.GetPoint(rayDistance);
 
-            // 3. Game logic checks
-            if (spawnPos.z <= 2f)
+            // 3. Game logic checks (UPDATED: Fireball ignores the Z-zone limit so you can hit enemy towers!)
+            if (spawnPos.z <= 2f || currentCardData.cardName.Contains("Fireball"))
             {
                 if (cardManager != null && cardManager.SpendElixir(elixirCost))
                 {
@@ -86,6 +86,18 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                         Instantiate(troopPrefab, spawnPos + new Vector3(-1f, 0f, 0f), Quaternion.identity);
                         Instantiate(troopPrefab, spawnPos, Quaternion.identity);
                         Instantiate(troopPrefab, spawnPos + new Vector3(1f, 0f, 0f), Quaternion.identity);
+                    }
+                    else if (currentCardData.cardName.Contains("Fireball"))
+                    {
+                        // Spawn high in the sky over the target
+                        Vector3 skyPos = spawnPos + new Vector3(0f, 12f, -4f);
+                        GameObject fireball = Instantiate(troopPrefab, skyPos, Quaternion.LookRotation(Vector3.down));
+                        
+                        // Pass the exact floor position to the projectile
+                        if (fireball.TryGetComponent<FireballProjectile>(out var fbScript))
+                        {
+                            fbScript.InitializeTarget(spawnPos);
+                        }
                     }
                     else
                     {
@@ -102,6 +114,7 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             }
         }
     }
+    
     public void LoadNewCard(CardData newCard)
     {
         this.currentCardData = newCard;
