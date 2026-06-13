@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
+using TMPro;
 
 public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -18,10 +19,11 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private CanvasGroup canvasGroup;
     private CardManager cardManager;
     private CardData currentCardData;
+    public TextMeshProUGUI nameText;
     
     [Header("UI References")]
     public Image cardImageComponent; 
-    public Text costText; 
+    public TextMeshProUGUI costText; // FIXED: Changed from Text to TextMeshProUGUI to match your Inspector
 
     void Awake()
     {
@@ -132,6 +134,11 @@ public class CardDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (costText != null)
         {
             costText.text = newCard.elixirCost.ToString();
+        }
+
+        if (nameText != null)
+        {
+            nameText.text = newCard.cardName; 
         }
     }
 }
